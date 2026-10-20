@@ -1,0 +1,1453 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Force Fetch: Lesson, Quizzes and Puzzles</title>
+<style>
+:root{--bg:#EEF4FF;--ink:#14213D;--soft:#5B6784;--card:#fff;--line:#CBD6F0;--blue:#0B5FD8;--green:#12875F;--red:#D9342B;--amber:#D17A00;--pink:#E6007E;--purple:#7A4BD1}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--ink);font-family:"Trebuchet MS","Avenir Next",Verdana,sans-serif;-webkit-text-size-adjust:100%}
+.wrap{max-width:560px;margin:0 auto;padding:14px 14px 40px}
+.screen{display:none}.screen.on{display:block}
+h1{font-size:30px;margin:6px 0 2px;line-height:1.1}
+h2{font-size:22px;margin:4px 0 8px}
+p{line-height:1.5;margin:6px 0}
+.muted{color:var(--soft)}
+.card{background:var(--card);border:1.5px solid var(--line);border-radius:16px;padding:14px;margin-top:12px}
+.btn{font:inherit;font-weight:700;font-size:17px;border:2px solid var(--ink);background:#fff;color:var(--ink);border-radius:12px;padding:12px 16px;min-height:48px;cursor:pointer;width:100%;margin-top:10px;touch-action:manipulation}
+.btn:hover{background:#F1F5FF}
+.btn.pri{background:var(--blue);border-color:#08439B;color:#fff}.btn.pri:hover{background:#0A53BE}
+.btn.sm{width:auto;font-size:15px;padding:8px 12px;min-height:40px;margin-top:0}
+.row{display:flex;gap:10px;align-items:center}.row>*{flex:1}
+.tag{display:inline-block;font-size:13px;font-weight:700;padding:3px 10px;border-radius:999px;background:#E3ECFF;color:#0B3A8C}
+.hud{display:flex;justify-content:space-between;align-items:center;font-size:14px;font-weight:700;gap:8px}
+select.ini{font:inherit;font-size:22px;font-weight:700;width:100%;padding:12px 10px;border:2.5px solid var(--ink);border-radius:12px;background:#fff;color:var(--ink)}
+input.ini{font:inherit;font-size:34px;font-weight:700;text-align:center;letter-spacing:10px;text-transform:uppercase;width:100%;padding:8px;border:2.5px solid var(--ink);border-radius:12px;background:#fff;color:var(--ink)}
+.chips{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin-top:10px}
+.chip{display:flex;justify-content:space-between;align-items:center;font:inherit;font-weight:700;font-size:15px;padding:10px 12px;min-height:48px;border:2px solid var(--line);border-radius:12px;background:#fff;color:var(--ink);cursor:pointer;text-align:left}
+.chip .st{font-size:12px;color:var(--soft);font-weight:400}
+.chip.on{border-width:3px}
+.dot{display:inline-block;width:12px;height:12px;border-radius:50%;margin-right:8px;vertical-align:-1px}
+.fb{margin-top:10px;padding:10px 12px;border-radius:12px;font-size:15px;line-height:1.5}
+.fb.ok{background:#DFF5EA;color:#0B5A3D}.fb.no{background:#FDE9E8;color:#8A1F18}.fb.info{background:#FFF3D6;color:#6B4400}
+svg{display:block}
+table{width:100%;border-collapse:collapse}
+td,th{padding:7px 6px;text-align:left;border-bottom:1px solid var(--line);font-size:16px}
+th{font-size:13px;color:var(--soft)}
+.tabs{display:flex;gap:8px;margin-top:10px}.tabs button{flex:1;font:inherit;font-weight:700;padding:9px;border-radius:10px;border:2px solid var(--line);background:#fff;cursor:pointer}
+.tabs button.on{border-color:var(--ink);background:var(--ink);color:#fff}
+.shopitem{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--line)}
+.shopitem .nm{flex:1;font-weight:700;font-size:17px}
+.shopitem small{display:block;color:var(--soft);font-weight:400;font-size:13px}
+.optbtn{font:inherit;font-weight:700;font-size:17px;text-align:left;width:100%;margin-top:8px;padding:12px 14px;min-height:50px;border:2px solid var(--line);border-radius:12px;background:#fff;cursor:pointer;color:var(--ink)}
+.optbtn:hover{border-color:var(--ink)}
+.optbtn.good{background:#DFF5EA;border-color:var(--green)}.optbtn.bad{background:#FDE9E8;border-color:var(--red)}
+.busted{background:#8A1F18;color:#fff;text-align:center;padding:30px 16px;border-radius:16px;margin-top:20px}
+.busted h1{font-size:44px}
+.how li{margin:8px 0;line-height:1.5}
+.flash{animation:fl .5s}@keyframes fl{0%{background:#FFF3D6}100%{background:transparent}}
+@media (prefers-reduced-motion:reduce){.flash{animation:none}}
+button:focus-visible,input:focus-visible{outline:3px solid var(--purple);outline-offset:2px}
+
+.pzgrid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-top:10px}
+.pzlv{font:inherit;display:flex;flex-direction:column;align-items:center;gap:2px;padding:10px 6px;min-height:92px;border:2px solid var(--line);border-radius:14px;background:#fff;color:var(--ink);cursor:pointer}
+.pzlv:hover{border-color:var(--ink)}.pzlv.lock{opacity:.5;cursor:not-allowed}
+.pzlv .n{font-size:22px;font-weight:700}.pzlv .t{font-size:12px;text-align:center;line-height:1.2}.pzlv .s{font-size:14px;color:#D99A00;letter-spacing:1px}
+.pzstats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-top:8px}
+.pzstats div{background:#F3F7FF;border-radius:10px;padding:6px 8px}.pzstats small{display:block;font-size:11px;color:var(--soft)}.pzstats b{font-size:17px;font-variant-numeric:tabular-nums}
+.pzlog{margin-top:10px;font-size:14px;line-height:1.5;background:#FFF9E6;border-radius:12px;padding:8px 12px}
+
+/* lesson (scoped) */
+#s-lesson h1{font-size:24px;margin:4px 0 2px;line-height:1.15}
+#s-lesson h2{font-size:22px;margin:0 0 8px}
+#s-lesson p{line-height:1.55;margin:8px 0}
+#s-lesson .muted{color:var(--soft)}
+#s-lesson .steps{display:flex;gap:6px;overflow-x:auto;padding:8px 2px 10px;position:sticky;top:0;background:var(--bg);z-index:5;scrollbar-width:thin}
+#s-lesson .pill{flex:0 0 auto;font:inherit;font-weight:700;font-size:14px;min-width:42px;height:42px;padding:0 10px;border-radius:21px;border:2px solid var(--line);background:#fff;color:var(--ink);cursor:pointer;white-space:nowrap}
+#s-lesson .pill.cur{background:var(--ink);color:#fff;border-color:var(--ink)}
+#s-lesson .pill.done{border-color:var(--green)}
+#s-lesson .pill.done::after{content:" \2713";color:var(--green)}
+#s-lesson .pill.cur.done::after{color:#9BE7C4}
+#s-lesson .card{background:var(--card);border:1.5px solid var(--line);border-radius:16px;padding:14px;margin-top:12px}
+#s-lesson .btn{font:inherit;font-weight:700;font-size:17px;border:2px solid var(--ink);background:#fff;color:var(--ink);border-radius:12px;padding:12px 16px;min-height:48px;cursor:pointer;margin-top:10px;touch-action:manipulation}
+#s-lesson .btn:hover{background:#F1F5FF}
+#s-lesson .btn.pri{background:var(--blue);border-color:#08439B;color:#fff}
+#s-lesson .btn.pri:hover{background:#0A53BE}
+#s-lesson .btn[disabled]{opacity:.45;cursor:not-allowed}
+#s-lesson .btn.full{width:100%}
+#s-lesson .nav{display:flex;gap:10px;margin-top:14px}
+#s-lesson .nav .btn{flex:1}
+#s-lesson .note{background:#fff;border:1.5px solid var(--line);border-radius:12px;padding:10px 12px;margin-top:10px;line-height:1.55;font-size:17px;animation:pop .35s}
+#s-lesson .note.red{background:#FFF1F0;border-color:var(--red);border-left-width:8px;color:#8A1F18;font-weight:700}
+#s-lesson .note .wd{display:inline-block;font-size:12px;background:var(--red);color:#fff;border-radius:999px;padding:2px 10px;margin-bottom:6px;letter-spacing:.3px}
+#s-lesson .note label{display:flex;gap:8px;align-items:center;font-size:14px;font-weight:400;color:#8A1F18;margin-top:6px}
+#s-lesson .note label input{width:20px;height:20px}
+#s-lesson .note table{border-collapse:collapse;width:100%;margin-top:4px}
+#s-lesson .note td,#s-lesson .note th{border:1px solid #E7A9A4;padding:5px 8px;text-align:left;font-size:15px}
+#s-lesson .note ol{margin:4px 0 0;padding-left:22px}
+#s-lesson .note li{margin:4px 0}
+@keyframes pop{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){#s-lesson .note{animation:none}}
+#s-lesson .q{margin-top:14px;border-top:2px dashed var(--line);padding-top:12px}
+#s-lesson .qtag{display:inline-block;font-size:12px;font-weight:700;background:#E3ECFF;color:#0B3A8C;border-radius:999px;padding:3px 10px}
+#s-lesson .opt{display:block;width:100%;text-align:left;font:inherit;font-weight:700;font-size:17px;margin-top:8px;padding:12px 14px;min-height:50px;border:2px solid var(--line);border-radius:12px;background:#fff;color:var(--ink);cursor:pointer}
+#s-lesson .opt:hover{border-color:var(--ink)}
+#s-lesson .opt.good{background:#DFF5EA;border-color:var(--green)}
+#s-lesson .opt.bad{background:#FDE9E8;border-color:var(--red)}
+#s-lesson .fb{margin-top:10px;padding:10px 12px;border-radius:12px;line-height:1.5}
+#s-lesson .fb.ok{background:#DFF5EA;color:#0B5A3D}
+#s-lesson .fb.no{background:#FDE9E8;color:#8A1F18}
+#s-lesson .fb.info{background:#FFF3D6;color:#6B4400}
+#s-lesson svg{display:block}
+#s-lesson .dgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:10px;margin-top:8px}
+#s-lesson .dopt{border:2.5px solid var(--line);border-radius:14px;background:#fff;padding:6px;cursor:pointer;text-align:center;font:inherit;font-weight:700;color:var(--ink)}
+#s-lesson .dopt:hover{border-color:var(--ink)}
+#s-lesson .dopt.good{border-color:var(--green);background:#DFF5EA}
+#s-lesson .dopt.bad{border-color:var(--red);background:#FDE9E8}
+#s-lesson .chips{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin-top:10px}
+#s-lesson .chip{display:flex;justify-content:space-between;align-items:center;font:inherit;font-weight:700;font-size:15px;padding:10px 12px;min-height:48px;border:2px solid var(--line);border-radius:12px;background:#fff;color:var(--ink);cursor:pointer;text-align:left}
+#s-lesson .chip .st{font-size:12px;color:var(--soft);font-weight:400}
+#s-lesson .chip.on{border-width:3px}
+#s-lesson .dot{display:inline-block;width:12px;height:12px;border-radius:50%;margin-right:8px;vertical-align:-1px}
+#s-lesson .row{display:flex;gap:10px}
+#s-lesson .row>*{flex:1}
+#s-lesson /* rocket */
+.rk{background:#0A0F24;border-radius:14px;padding:10px;color:#EAF0FF;margin-top:10px}
+#s-lesson .rk canvas{display:block;width:100%;border-radius:10px;background:#050818;border:1px solid #2A3566}
+#s-lesson .rk .ctl{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-top:10px;align-items:end}
+#s-lesson .rk button{font:inherit;font-weight:700;color:#EAF0FF;background:#223070;border:2px solid #3B4B96;border-radius:12px;padding:10px;min-height:48px;cursor:pointer;width:100%;user-select:none;-webkit-user-select:none;touch-action:manipulation}
+#s-lesson .rk .fire{background:#B8680A;border-color:#FFB020}
+#s-lesson .rk .fire.on{background:#FFB020;color:#1a1200}
+#s-lesson .rk label{display:block;font-size:13px;color:#9AA7D6;margin-bottom:2px}
+#s-lesson .rk label b{color:#EAF0FF}
+#s-lesson .rk input[type=range]{width:100%;accent-color:#FFB020}
+#s-lesson .rk .chk{display:flex;gap:6px;align-items:center;font-size:14px;margin-top:6px;color:#EAF0FF}
+#s-lesson .rk .eq{text-align:center;font-weight:700;font-size:17px;padding:10px 4px;min-height:48px}
+#s-lesson .rk .meters{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}
+#s-lesson .rk .m{background:#141B3A;border:1px solid #2A3566;border-radius:10px;padding:6px 8px}
+#s-lesson .rk .m .n{font-size:12px;color:#9AA7D6}
+#s-lesson .rk .m .v{font-size:22px;font-weight:800;font-variant-numeric:tabular-nums;line-height:1.15}
+#s-lesson .rk .m .v small{font-size:11px;font-weight:600;color:#9AA7D6;margin-left:3px}
+#s-lesson .rk .tr{position:relative;height:12px;background:#0A1030;border-radius:6px;border:1px solid #2A3566;overflow:hidden;margin-top:4px}
+#s-lesson .rk .tr::after{content:"";position:absolute;left:50%;top:0;bottom:0;width:2px;background:#6677bb}
+#s-lesson .rk .fl{position:absolute;top:0;bottom:0;width:0}
+#s-lesson .miss{margin-top:10px;background:#fff;color:var(--ink);border-radius:12px;padding:8px 12px}
+#s-lesson .miss div{padding:5px 0;font-size:16px;display:flex;gap:10px;align-items:flex-start}
+#s-lesson .miss .ck{flex:0 0 22px;height:22px;border-radius:50%;border:2px solid var(--line);display:inline-flex;align-items:center;justify-content:center;font-size:14px;color:#fff;margin-top:1px}
+#s-lesson .miss .ok .ck{background:var(--green);border-color:var(--green)}
+#s-lesson .check{display:flex;gap:10px;align-items:flex-start;padding:8px 0;border-bottom:1px solid var(--line);font-size:16px;color:#8A1F18;font-weight:700}
+#s-lesson .check input{width:22px;height:22px;margin-top:2px;flex:0 0 22px}
+#s-lesson .check small{display:block;color:var(--soft);font-weight:400;font-size:12px}
+@media print{body *{visibility:hidden}#printArea,#printArea *{visibility:visible}#printArea{position:absolute;left:0;top:0;width:100%}.noprint{display:none!important}}
+#s-lesson button:focus-visible,#s-lesson input:focus-visible{outline:3px solid var(--purple);outline-offset:2px}
+#s-lesson .btn{width:auto}#s-lesson .btn.full{width:100%}#s-lesson .nav .btn{flex:1}#s-lesson .steps{margin:0 -2px}
+</style>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js" onerror="void 0"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js" onerror="void 0"></script>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs><clipPath id="hclip"><circle cx="0" cy="0" r="14"/></clipPath></defs></svg>
+<div class="wrap">
+
+<section class="screen on" id="s-home">
+  <div class="row" style="align-items:flex-end">
+    <div style="flex:0 0 175px" id="homeDog"></div>
+    <div><h1>Force Fetch</h1><p class="muted" style="margin:0">Free-body diagrams with Murphy</p></div>
+  </div>
+  <div class="card">
+    <p style="margin:0 0 6px;font-weight:700">Pick your name</p>
+    <select class="ini" id="ini" aria-label="Pick your name"></select>
+    <p class="muted" id="homeCash" style="margin:8px 0 0;min-height:22px"></p>
+    <p class="fb no" id="homeErr" style="display:none"></p>
+    <button class="btn" id="btnLesson" style="border-color:#12875F;background:#EAF8F2">Start here: the lesson <span class="tag" style="background:#CFEFE0;color:#0B5A3D">Recommended</span></button>
+    <button class="btn pri" id="btnPlay">Play quiz rounds</button>
+    <button class="btn" id="btnPZ" style="border-color:#7A4BD1;background:#F4EFFF">Force puzzles <span class="tag" style="background:#EDE7FB;color:#4B2D9C">NEW</span></button>
+    <div class="row"><button class="btn" id="btnHS">High scores</button><button class="btn" id="btnShop">Class Cash shop</button></div>
+    <div class="row"><button class="btn" id="btnHow">How to play</button><button class="btn" id="btnSound">Sound: on</button></div>
+  </div>
+  <p class="muted" style="text-align:center;font-size:13px">Mr. Ward's Tools</p>
+</section>
+
+<section class="screen" id="s-how">
+  <h2>How to play</h2>
+  <div class="card how">
+    <ol style="padding-left:20px;margin:0">
+      <li>New here? Press <b>Start here: the lesson</b> first. It is a short step-by-step lesson with notes, a rocket lab, and practice.</li>
+      <li>Each quiz round has 9 questions in 3 styles: <b>Build it</b>, <b>Spot the mistake</b>, and <b>Predict the motion</b>.</li>
+      <li>In a free-body diagram, the dot is the object. Each arrow is a force acting <b>on</b> it. The arrow points the way the force pushes or pulls. A longer arrow means a stronger force.</li>
+      <li>Right on the first try earns 100 points. Streaks earn bonus points.</li>
+    </ol>
+  </div>
+  <button class="btn pri" id="howBack">Got it</button>
+</section>
+
+<section class="screen" id="s-mode">
+  <h2>Pick a level</h2>
+  <p class="muted" id="modeWho"></p>
+  <button class="btn" id="mEasy" style="text-align:left"><span class="tag" style="background:#DFF5EA;color:#0B5A3D">Easy</span><br>Everyday setups.</button>
+  <button class="btn" id="mHard" style="text-align:left"><span class="tag" style="background:#FDE9E8;color:#8A1F18">Hard</span><br>Trickier setups with springs, ropes, and braking.</button>
+  <button class="btn" id="modeBack">Back</button>
+</section>
+
+<section class="screen" id="s-q">
+  <div class="hud"><span id="hQ"></span><span id="hScore"></span></div>
+  <div class="card" style="margin-top:8px">
+    <span class="tag" id="qTag"></span>
+    <p id="qStory" style="font-size:17px;margin:8px 0 4px"></p>
+    <svg id="scene" viewBox="0 0 340 80" width="100%" role="img" aria-label="Scene"></svg>
+  </div>
+  <div class="card" id="qArea"></div>
+  <div class="fb" id="qFb" style="display:none"></div>
+  <button class="btn pri" id="btnNext" style="display:none">Next</button>
+</section>
+
+<section class="screen" id="s-res">
+  <h2 id="resTitle">Round complete</h2>
+  <div class="card">
+    <div class="row" style="align-items:center"><div style="flex:0 0 150px" id="resDog"></div><div><div style="font-size:40px;font-weight:700" id="resScore"></div><div class="muted" id="resSub"></div></div></div>
+    <p id="resCash" style="margin-top:10px"></p>
+    <p class="muted" id="resPost" style="font-size:14px"></p>
+    <button class="btn" id="resRetry" style="display:none">Retry posting</button>
+  </div>
+  <div class="card"><b>Top scores</b>
+    <div class="tabs" id="resTabs"><button data-d="easy">Easy</button><button data-d="hard">Hard</button></div>
+    <table><tbody id="resLB"></tbody></table>
+  </div>
+  <button class="btn pri" id="resAgain">Play again</button>
+  <div class="row"><button class="btn" id="resShop">Shop</button><button class="btn" id="resHome">Home</button></div>
+</section>
+
+<section class="screen" id="s-hs">
+  <h2>High scores</h2>
+  <div class="card">
+    <div class="tabs" id="hsTabs"><button data-d="easy">Easy</button><button data-d="hard">Hard</button><button data-d="puzzles">Puzzles</button></div>
+    <table><thead><tr><th>#</th><th>Player</th><th>Score</th></tr></thead><tbody id="hsLB"></tbody></table>
+  </div>
+  <button class="btn" id="hsBack">Back</button>
+</section>
+
+<section class="screen" id="s-shop">
+  <h2>Class Cash shop</h2>
+  <div class="card row" style="align-items:center"><div style="flex:0 0 90px" id="shopDog"></div><div><div class="muted" style="font-size:13px">Balance</div><div style="font-size:34px;font-weight:700" id="shopCash"></div><div class="muted" style="font-size:13px" id="shopWho"></div></div></div>
+  <div class="card"><b>Leaderboard name colors</b><div id="shopColors"></div></div>
+  <div class="card"><b>Murphy's hats</b><div id="shopHats"></div></div>
+  <button class="btn" id="shopBack">Back</button>
+</section>
+
+<section class="screen" id="s-pzmenu">
+  <h2>Force puzzles</h2>
+  <p class="muted" id="pzWho"></p>
+  <p style="font-size:15px">Build the forces, then watch the physics play out. Finish a level to unlock the next one. Earn up to 3 stars per level.</p>
+  <div class="pzgrid" id="pzGrid"></div>
+  <button class="btn" id="pzBackBtn">Back</button>
+</section>
+
+<section class="screen" id="s-pz">
+  <div class="hud"><span id="pzHud"></span><button class="btn sm" id="pzBack">Levels</button></div>
+  <div class="card" style="margin-top:8px">
+    <p id="pzBrief" style="margin:0 0 6px;font-size:16px"></p>
+    <svg id="pzScene" viewBox="0 0 340 190" width="100%" role="img" aria-label="Puzzle scene"></svg>
+    <div class="pzstats"><div><small>Net force</small><b id="pzNet">0 N</b></div><div><small>Acceleration</small><b id="pzAcc">0.0 m/s²</b></div><div><small>Velocity</small><b id="pzVel">0.0 m/s</b></div></div>
+  </div>
+  <div class="pzlog" id="pzLog" style="display:none"></div>
+  <div class="card">
+    <span class="tag" id="pzStageTag"></span>
+    <p id="pzPrompt" style="margin:8px 0 0;font-weight:700"></p>
+    <div class="chips" id="pzTray"></div>
+    <button class="btn pri" id="pzCheck">Check my diagram</button>
+    <button class="btn pri" id="pzCut" style="display:none">✂ Cut the rope</button>
+    <button class="btn pri" id="pzGo" style="display:none">Go!</button>
+    <div class="fb" id="pzFb" style="display:none"></div>
+    <div id="pzEnd" style="display:none"></div>
+  </div>
+</section>
+
+<section class="screen" id="s-lesson">
+  <div class="hud" style="margin-bottom:6px"><button class="btn sm" id="lsHome">Home</button><span class="muted" style="font-weight:700">Lesson: forces and free-body diagrams</span></div>
+  <div class="steps" id="lsSteps" role="tablist" aria-label="Lesson steps"></div>
+  <div id="lsMain"></div>
+  <div class="nav noprint"><button class="btn" id="lsBack">Back</button><button class="btn pri" id="lsNext">Next</button></div>
+</section>
+
+<section class="screen" id="s-bust">
+  <div class="busted"><h1>BUSTED</h1><p>Those names aren't allowed. Pick a different one.</p><button class="btn" id="bustBack" style="background:#fff;color:#8A1F18;border-color:#fff">Back</button></div>
+</section>
+
+</div>
+
+<script>
+const LB_ON=false; // set to true to bring back high scores and the leaderboards
+const CASH_ON=false; // set to true to bring Class Cash, the shop, and payouts back
+const IMG={"rob": "data:image/jpeg;base64,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", "snow": "data:image/jpeg;base64,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", "puppy": "data:image/jpeg;base64,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", "eyes": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAcFBQYFBAcGBgYIBwcICxILCwoKCxYPEA0SGhYbGhkWGRgcICgiHB4mHhgZIzAkJiorLS4tGyIyNTEsNSgsLSz/2wBDAQcICAsJCxULCxUsHRkdLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCz/wAARCACIAIgDASIAAhEBAxEB/8QAGwAAAQUBAQAAAAAAAAAAAAAABgADBAUHAgH/xAA2EAACAQMDAwIFAwIEBwAAAAABAgMABBEFEiExQVEGYRMUIjJxB0KBI5EVJLHRM0NSU2Khwf/EABoBAAMBAQEBAAAAAAAAAAAAAAIDBAEFAAb/xAAhEQADAAICAwEAAwAAAAAAAAAAAQIDERIhBBMxUUFhcf/aAAwDAQACEQMRAD8ADRafEXpQ16g0Bwfjwoc9wKOLVMrhkIP4ok0HRXvJyQFRcdXj3Z/vXIWVw9n0V4ZudMxXSfTGqatIFs7KWXJ5YKcD3NaHo36Qrz/iMizhh/yyVKmtfSzgsLcAIgbyFCg/xUmwUM2TAFB/caC/Luul0Tz48yv0z/Rv0r0vSpviwRPJJ2Z2JxRXB6cEY5A/FF8QgAwACa6ZkHAjH80Hsb7YDl/ECh0dQPspp9L4xtoqc8/YK4kRCftFe9hqx/oLDSuR9PSuzpYxnbRBvjU42ivHaPBBAr3sZvrBiXSw37eRTY0oMPtwRRKNhb7RXu2NT9orPYzeAMNpe0j6aZl0tVQlo/4AzRbKsTRj6RmlHHEQN659qLmZxAGbSFcllGSOtR/8O29VrQLk2ajaURe3FRY7COQlsKUPQnrQOh0gR8kAelKiy+02MfVGgAHUUq9yY1KWMLpVhFKPiwhvepqywQJ8O0QRKeyjk1XNqLzTAFVQeFGWNRLnVw07WlsA8g4ZVP2+xI/0FJ02Y2XEMzy3G2Ng2Puc84/mr23OxVCoGJ/cTQ1Yl1wrSo0gHA6Bf4om07cE3nDnz4okgKZYhVVMsAWppk5yK8eYMcFgK43HGQeK1sWkxzB280xK2FrszZ69ajzPlazYSRBeQhyTXKuXPmuLlq5hOMZrAiXHnpinzEWAOaYE4UVGuL0qhIOKJAk0oiklpAP5qFdXRRCASfxUEXJkyzEkVDvLxgOEbHtRmCn1SFODjIP7gaeh12FYjz+SB0qAlykilZAD7MKjy3NmshWSHYR3ArxpKPqaJ2ZUy5HilQxqF/8ALOfhSZRjwAnNKiUmNjmt+ok0uyMVsR8zL9C92JNcaIxtLTG4NM33Hsvn+aCHmMl6buclpRwn/jnxRPp1yscAX9qD+5rXHGTVW2FdjdEXQAO5jjt1rQrSGUWiKxwcdhQl6N0r5iX52dQQv2+M0aTT4GF4FJejX96OAkcQLPgn3qJLdqOlM3twyof/AKaGb7VfgOfr9utD/gSnYSG+55rlrpSODQzFq6PwzYqTHeq5wpz71vZrnRYzSbj1ptZto5NRjLnnNeGZCtYYTmm+nOeKiTuHGMjBqBd3xij+7AoX1f1E6tsjc0yJbAp6DdoPiR8Sqn5NQrjdbY3P8RT3FZ9b+qJi+GlOM8k9TV7a660y8uXU9QTTXjaAVJhPC1o43bQzd81X6pFEOQNyN+09qhC5UkOoKjxU0stzCFZuexoNBme68ZbW8RorhxGTgA84pVz6wX5a7G8cE5zSquFtE91qiidgJkyeF+o+9GXonS7j1DqkcQib5ZCGlbGAB+aB7mNviqgIDyHvW+fpxp0em+kYh8QO8n1MQMZ/3ocz4yex90FaNBZwLbW4WONBgAVGmvUUffn8U3cEE8f6VAm75Nc7ZWpQN+tvU0umacxtgGnk4Td0zWH6hqOo6ldtJPeTzSL9R2sQF/AHQVrn6gaRLfWCXEGWeH9orG5dPvnu2gihlLOMEKDyP9q6fi8eOyTyuXSXwIvTuv6g2mzI0jSxxsAHPJGaOvTeptNagliQD0PWqn0l6dGkaSfmkE3zJDNgfaMcVf2ujPZv/RGUJyo8UrNUttIfiVKVyZcteKFIB5pkTsVJzgVHjtnH3DjpXZdc7V7cVNoaQ9XuCLJipwT0rOL7UHTcZXxyRgda0DVpVFlJxwvNZHq90bi/ITpngCq/HnZJ5FaHF1RY5tzMAvuelWtlqyXH2zZUHohoT1Ky+VuAkkqu5AyoP2/mo1rLJbXIkibBU/3q14010QrK5emaxZ6kznG8EDycVaHUpIkLBhgDJGaDNPv4pURi2GI8VZNcNNaSL4B781FUdl81tDHqG9F6gaQ5yOO9Kh+S6dkIJOUPQ0qfM8VoTVJvsJJre2s9Ta6vVUwwnCq37seB7mtG9A69FqVo0st3udjhY1BCoB2FCP6kaUwnSeKPZEy9R5qJ+m2rfIE26W9xLK/AVVwPzSKSvHyGvcZOJtcrIwyrGocuM8mlC0jxD4qbD461zJiuc+iySLOiSIVYAg1AsNJs7e8eWOJEduOnWrlbYsm9h181GnijjOclSOhok2Fs9ks4cH6B7jtTEkaqBt4xTFxqixjax581Bl1WNAd8gA96JJi2yxYIVOPOaiJbI7M3TnANQV123OU3g+Oa6GrRGZY1IzTOLB2jjVtL+ZtGjBwuO1Ypr1k+mawYkBXa2Rnqa3U6hHypIoD9daKdTaO5t03TL9x6DFUYL41pk+aOU7RmeoO9zP8AHK4Zhz701bwSSvtVTkmryCxPIkA4yDU+0s40fOMt48Ve8mloiWPb2xm2sygXhvp71YC4eNSu3cR096mxjauBg4HcUpI45VI2hWPQ9KldbKlOvhUnTzqMMjxRMWUbmI6ilRH6ZuE03VNsy5gnXY58e9KhrLUvSQ2MEWtt9mq6po8GoWLRTKCACQx7HFDnoz0a2mzTXT3TIrOdsaD9vuaJTfRxgK7b2x9gp+0jDAy5K552k8VCraWkW5ce2qJEhCjAOBTcMRmk55UdabmdU+okkVPslLWpcng9hStA70jqUhFwM4Aqj1OYJG2QDkVY3MhTPFDuof1Ax5Jol9MA/VdUkSaRixVUGc96DdQ1+edj/VZUHQA9aJdetJZI5AoIXH4zWXah8wlwVwRz2rqYJTOf5NOS4OuTKwCOR75pQ+pbu3uN6S8+KoyxBG7rio6uTIQelV8ERc2ano/qQXQVpHG7xRVAYr2HEgDgjvzWVembdp23Y4zWpaREIYFHOcda5+aVL6Ojhp1O2DOvabFZXSqqFY5OhPT8VTlWtn+0lfPcVoWsaamo2hV+ccjIoBnD2sjRSEyRA4yfuX81uOuSPXOnsejnWZAacBwwzkjzUGJf62FyR1zVtYWckssYWNmVmC5HOKN9Arss9O0+O7u493EbDr4NKiW29MXtvCCiMVPIxSqZ1t9MviZS7CVoolciCLax6sRTsf8ASXEjlmruBy7H4mNw96kJEksgUZOamKGyCIJJpd0pAGcgeB/vVxHiO2C4O0f+6avLRbVQwdgvckUwLtXj5yR27V4kb2MXs4OQB/btVFO3JyKs7uUYOOBVLdSnnP8AasSDRAvY4ponRgCWGKyj1FpMtpcM6nKknFaDqerLbAhcE9zQVrGpreNlyAgroYOUsn8ni50/oHvGwfJ609a2Uk8qqiFsnnip8RguL1hjgLgUSaIbGNssyrIvA71ZWTSOdGJU/pbaFpSQwI4iCtt5BohgLQnKkY7jxUKC8i24VhkeK9a6V8qTx5rm03T7OrMpLSLxJmZcZHNCOswxxX7RyqMPyCO1WyTTJt25demV7U3qNubmMNkbsdSOa2OmLsHbK0/zghHRmwta96a9PQadpkYnjV3EpdW9u1Z/otoI51kfkqeK0+wvRNbqCeg6VuVti5SRfoyMgAFKoIcxrknaO1KkBlGZI7YCe4HJ6svSrbRZxeyl4hmNf3VV6NoU9/GPjMwg/wClhRjb2UVlarDCgVF7Cg0VZMi1pES8IZSCMjxQ5dL8F89s8CiO6wQcjBqludjZU9fehFSUlzcgZJNDt9qAmJjjPJHap+tRTvcGKNSEx181WLZfLjkfUeaZOhn8FFqOhS3ke5Cdw7E9aE9Q067iBRoRgdcitThXGMio17Yw3CngAkeKpjM5+k2TEq+GQC2nH1BDwfHFIW11EwZAf44rTm0WLbgBSMeKZOlwRH/hqT+Ko96JvR/YJ6NcXKgCYFc9z3ottSrqN2M96iT2iHIAA8cVxF8WHgEmlW1XwfG56LyIIvSu5pF44xUCC4Yrl1wacd/iEDFLU9hOiTC2xwVxRVol3ErbXGRihOEbTzVrYvtcHoK2gEGTXQI2AZJ6E0qrfjBlAOAexFKkjEHcGI4VG3bx0rppT2pUqUYiDe4MZJPPmh+cZc+aVKhY6SNIit91QLuzifnBzSpVqNZBeERrkDiobjjmlSpsgMaYDZx2qJKhLDx3pUqYgGRmiUnJ6V2ix/8AbzSpVrMSOXXCl/HSuYv6h3Dr4pUqNAv6SEba/Sp1s4z9OaVKsZ5FxDKTGDgnHcUqVKg0Gj//2Q==", "under": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAcFBQYFBAcGBgYIBwcICxILCwoKCxYPEA0SGhYbGhkWGRgcICgiHB4mHhgZIzAkJiorLS4tGyIyNTEsNSgsLSz/2wBDAQcICAsJCxULCxUsHRkdLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCz/wAARCACIAIgDASIAAhEBAxEB/8QAHAAAAQUBAQEAAAAAAAAAAAAABgADBAUHAggB/8QAOhAAAgEDAgQFAwEHAgYDAAAAAQIDAAQRBRIGITFBEyJRYXEHMoEUFSNCUpGhsSRyQ2LB0eHwFjOS/8QAGgEAAwEBAQEAAAAAAAAAAAAAAQIDBAUABv/EACERAAICAgIDAQEBAAAAAAAAAAABAhEDIRIxE0FRBDJx/9oADAMBAAIRAxEAPwAS1G4hVGSM7VX/AOxyTy9utCl9dG4lBwVQckX0FO394Jn8OMnwkPX+Y+tU0czyXNxuJ25GAT0rDCNI05JubtjsjVAkf99j0FS5DVc7ZnNWgiMjt2DnJRSfXbzpFice1c5r5mqkxfxk12DTWfMa7FMAdBqdZnIPyKrwam2Z6/IpZdHl2E9gOQoksjjFDFg/IUS2EgGOtRSKsJLKTGOf98VZPevBCWUtnp0zVHBcjZzP9qjnVrhdSQW0RkAPbnTCGjcP+DMYEuhJa3cw3QzKuUYjuD6+3eia70JLz9QxhEd9JCUmCcluE9f9wOCDQ1wvqNneI2m3cX6W4kbKY8o3jsR2bNGtjd+MP08j5u7U+VjyLD0NXjBNEpTaeiptLeK/t7VbhMvtaNlIxk7QT+cgkGlV1ERM5+3aG8eEjkysOo9x7Uq9xQVJni4mo7RLHcSuuQrt5QeuPen2pp+9ZDSMSHrVeec7VPendI4a1bX5ZJNPtTJEp2mQsAoPpn1p4iyK2lWpWH0VuLqGJpdRmgfrMrW32ZGRjmc0T6R9I+FtLkMt7dSaszN4ey4UIi8vRep/NF5IoCxtmCZGcZ50/Z2txqF7FZ2cElzcyttSKJdzMfivSkH094b8JLS14dsZYkxiWRAWx3JY8yaKNA0XRuFUCafplrbCNdoMSDcc9ck8zXllTC8dHmKPgHiyWC4lTh3UGW2O2T9ycg+w6n8ZqqiWS2umhnjeGUdUkUqw+Qede3bCMXCtLK4AYZ3A96oeJuENE4gCrqthDeFW3Rn7X/8A11xRcnQqSPLlnIeXOru2u9ncVqOpfRzh83VxJDdT2azHKBXGyL4GOY/ND2ofSt7O0nNjq/6ycZMQMYCsB1Bwevv0pLSGqwWuNUKxkg9uxo1+n1lC0sd9I7fvOR3gFT8evuP7d6Br7gziOKBJ4rcTR+A1w5U48ML1Bz39quuHeIrrRreFNQ064tBKoYO6EI47MR1FUhJXYs4uqNqvdH07UGWZ7eMTYXDr1BXp/wC+1c31xLDeJcLGW2DHiJzDD37g+xoSt+LY5YlWNt/8rKc4/wDFWEOpsyFp3LMRkKpxn5q0skfRnjCXsJv2iqWMLQOhK5LevXpSrP8AWOJxArRxuqleoTkAfT3NKs8suy6xGDYp5dH1C5sXvLa1e5gjOJDCQ7J/uUeYD3xiijhHhuz1oO9zHcSBWxhMBQPkg5rQYrbS+F0JtIYLUjm0m0K5/oedTKGT6FwNq+t3ypNbzafaAbnuZ4WCgeijluPtWs6Ppi6PZppttJcXcO3aBIEwPbyjAPfHOoE99eapdxrE2yR/+I5yVXuQvRfkmiXR49Otowmn20k+0kfqJDje3cjJyfmjKDCpof8AAe1j3zSPAmMECNiSPQk0/oP6C6mkaCWNjnzdWb89ga5nS71vWIdMgkEaIu+4IYYRew+TRrZ6VDZxqkcSBF/lXFGOLkLLNxO9Ms4IF3GLduHMsu8CrEWMBO9AmO7BaehgiVQUyKdaIk5UgfIrQsaWjM8rbsivC7MFbZgDK7FwDXxdNUeZWbceoIzUzGzAwATy5UimRyYg03BCeRlBf6XcCTxYFzIOQ3IGU/I/7VTWwtbW4kF3G0UoGGTwyWPwAOnvRZLbsDnxSp9mqvvhMEMquBKi53Mucj0NTcKLKdoFbnElwZP0pjiJz4ZOAw7Ke1DWp8PXN5vvdYvoEMjEg+BIFReylh2/FGc8iXkWZCuxhksgJH5FQ9Ohuba8kt45VkJUlEmO6KUY5DB6fg1FLZa9GbqILW8W0s44p2zyFtllP5wKKbXSNVliLFUt3kX7pHHl98UU6VaWYLy21hBBcO2JbcHDBvTPr7H8ZqeBbT3KgwmEr9wcFc0JKQU0Zyn07vb2fbNqSLDnkLZC7t7knAFKtY3QRSqYY0jU+YhVz+aVe8f1nvJ8R5g4U1cWlncWYZleRt/JsAjFTZtQiiuGlWB5ZR5Y0Y53Mfx0oPtJVtryKZmZQjZ8ozRnJbpEHkgc75VULJ1I3cyw+Fzj3qkFsSb0XqXVrYWps47hru4kTN3Ogzk91B7DPID29aMYpYtO0qOWcLajw87EHMDHf0+KBdHVW1/TbGBFSEMJpAeyL0yfbr8mj02A4k1OQShktYyGb3GfKvycZPoKo1ZNOi74QtoItJW+dds12xlwV82D0B/GKKYJZGfkg2+9R7VYLeFUCKiqAATywB7V8k1C1VwEuEGeWM1phGkZpu2XSMB2xmnFaq63ukYgY61MjYN8UZRIqVMdbm3LrXLMQOea+7xuNU2o6oqTeEjYI55z0oJWFv4WE1otx/xpFOP4WqrmW4sZR4hM0TdG5Yx6VzaXkjYkVySPVs5qbKWnjLbQyn7l7UJRKwbBWFVttTeDIC7tyN6qemf8VLv7FIrjxY1RF+0jP2HPJx7dq51G2WK8jViFZvs/zUqaSGaeGSXO3YVJ9FYdfwRmk8aqx+buir1OFZBEYH/1hXaWU5EgHPaf+YdvUVBsNXnWf9NqMhbJ8kh6/B96e1CzuYzdBRsniHjRle465H+fyarNTdNQtY7yBQrtGJCB698fnP8AWpSj7KxlegxkcyWZUHEy/aw6MPf0NKqXRb39Tpy5JUEAI3Xnjp/73pVOSspF0eZLeDxmLNyjXr7+1FuhXIuLOW3kP7xAxjx3GOn4oas23ItujfvJW5Cr5Yv00aiIlSOhHX5rP5eEjV4lKBaW17J+2YILfAmuSiMcdEBzt/JrZOHbKK1lu3dy8m8AnOQDjGaxfh1G/wDkZvnx5VAjUevrWmaTqLw3eoO2fBEcb/nBBP8Aat8aa5GCSafEKdUmktrSSYNiONS2SMcgK8/6t9XtYvtTFrplva2yPIEVp23M2TgZJwq/Pb1raW16G4tWjLh1kUjBPLFYRqv0ovdZ4hmOggtbSudjPkICe248sU0pX0GMa7NB4W451qwn0621d4pRewePG0bhlPnZeRHL+E/2PethtNVW7iXbIkbSerDlWVcP/RdbGytjrvEL3Bt0EaQ2y7VjUc8DPXnmjJrDR9Nh2W6E7cfvJJCHIqkW12QyRT6CO6kmggIaUA9sHrWb8VcWnTY36bx5VAOMnOMZ+TRYbP8AV25NpetbvjyiTzJWW8Q8G8a2WuQ6xbWlhrcdrcJNHArkFgpz9p68/enlLQuOG9gvJ9W9TtbrwzFKlvHIYioJQAg8xnrn5Oa2jgzjiHV9Pilidm3L0JyD+a816/onEF1xBd2i6ff2qT3TXn6K4POKSTmSccjy5bvSty+nvBjaLw4hupCbknd1xt9gPT2qSTZaVJGhanMZLOO7jR3MEquUC5yM8x/SojSxyXKiFw65JUDn36V1bTXUaFY5VP8AuqMWJuJJGwXRd5I6Egimim9MlPWz7evOrBQyn9OhaE+q5yVP4OKF7Fg++2hcoYHLxZ7IeZX8VK1PV28aR4zkIrH25f8Ag05oWnpef66VG/TBjzU8wfb1o5FGMdgx8m9EvTradI3SKWNU3YKHkWb/AKUqnyaP4iCa1hEsYbb5Tg9KVc5tt9G+l9MXhsba3ijjjhTMYwHI83Przr5JGq5OKljAFMTnkcVyrZ1KoatJhbSgDC7jlmxRZDqYi1JbVrgILqMxEHGN2PL/ANaF9Mt5Li+UKqsFBJ3DIq6urW3YQ3BETTxup3AnHLsRXQw/oShwkYcuBuXJAtBacR65xO2jWxMVuH/ezKRiNM9ck/2rZ9K0+Hh/QEsrGeSeJABmVgcn164H4qi4N0pY7q8vlkiUXDBQCu5zj/AotuIV8IZjUqBk4HKteNOrM+SVujO/qTxxf6Dw5Gti8cN7cSeHvHPYv8w7Z7V5+uNUvb+d5bi/uJnJ5u8rHJ/rXoH6j2VvrOky2aYhmiHiKrJ5W+SOlef5rKNZgqsq5OcA8vxVd+yf+BTwNxxq/D+qRyRXclxYK4Wa3kkLAg8sjPQit8suKby6vBKsIhtjgozHLN7+1YlwDwamoXb3rvDBbwD7pD5mP/LW3ab4ckUQQtIqqBz64oScqpDJR7Z8450y+1rT01TRYUk1O3G5osAG4Qfw7uxHUf070F6f9TIrS4e2vIJLW6RtkqTDBUjsQe4rYbCyGwKGGTzAPSsk+qX06tbjWU1CzD2d3dE+LGRlJD/MD2NebklYI8W6YUaZxna6odtuyykKWIXtivsGpsNHuyGLSRqGUjqeRLD++KEeAeGjZ214kYla6K7CrAAbe+KI4NC1vwRawaZPI0obDFfKCxxknsBVcd8bZHLXKkWPCegvxLdXFxI/h2pd13Y+7ocD8GtEi0lLKOJIIo44ovKI1Xlj/vUfSdHt+H9JsbK23NHCoXdnO5u7H5OauHiEq5zg0s1z7FjLj0RGi/Szh0KCMnO3sT60q6iiDTiMq8Lr1ZT91KkUaKN2eZJL0DoMVW3mq+GpG8n2r7Lkcyc1R3xLMx61x4QTOvKTQ7HxFe29wTbSBC/I7jgH81dftuBLOFpmZ70HcxWTl8e9A10pwcVXNNdpyD5A6ZHStHiTI82j0LwBxKL2zeJYsSxvgs3Ug9K0jxAYii4LAZY+ntXnj6Uy6hvvLhkJiQqVbmMt6DtWnXPFgtdNeUqzOFyUHtW7DJRVMx5Ytu0Cf1B4q1PSOILaTSUWSS2lEkhKbl2gdH9jkjFA99xrrWpFYvB0nTYSMMkViuG5k5JOW745dq17TRa3enR3F9FGHulDSAj1Heo0/AGhanM5t41iLDHMnOavV9MlaXaM7tvqLqSWosv2LpIeQeG13DCVYKXBJA6ZxkD5rbNBRLu2gu4DtPfFVGncDcO6ZH4j20MsoXow3Ae4pi71YcINJd25aaxc73jXmUJ6lR6e1MlXYrd/yags0axgMoZuxHI0NcZTDULKK3jYmXeCBioFnrtzqVmk8QaNZVDruGDzGfxVvo1tJNMLy9QbceRWGST60WuTpCp8FbJmj6KllpkUeAlzPje/cgelEcMMgBC806eYnNNWcO5vG2ksO/oPQU+8rqCVDhTzO7tTvWkZbbds6nO5oogAAeuKlYGBnpVfCpkuA4IAXsTzzVg3QVJlL0NgvG/XdjoD1pV9JbxAMg45g0qDQymjytOiunOqu4gRwVIyKmzyEHAqG5Pevno2j6Jlc9jCP4Afmo0kFsh+wM3QADPOp1y52HArrhvTZtT4itYY1RgHEj78Y2jr1q8E5EpNRNM4U0ldM0S1gkibdKNzjoAx7Vb3fD0V7Yy24BiMq7Q2ftPxUy5hdUiMVsIQgyGRgcire0s0kt1dQxJ5l2OcV1ceP0czJk3YHScM6ymFYBlXADA+U/FPxWV3CpUv+8B5Bc5NG0EskU6iNEHLr3Pvg9KsJ0jvYkWSKMOpypA81aI4l6M0sz9meS2mqMq7ImbHZjjNCesSXkV69tcxNAwXkDzBrc7a0WJliJZuXQ8wKeutO0qeVJp7OKeWPG1nUErjmKMsPxno/pp7QIcPcNX11plnPfMkZEa7S3VhjlkUXwWwiQQg+IEHp0+KdMoQNhBkjJpWyN9x5bufxVIxUSE5uXZLidXjUI0iqO+0gmlPC7RlgT610PKuSTXyW42xcj17d6X3oRHFqVZdijPfmOYqWXIB5ZP+agw7hl8kN1p+KYNH5+5yKVodvQ8gJG7OT2pVHa7C88jn0pUeEmJyo8uSKp6qKjSRjtSpV8umfWs+Wmk3GpXHgwJnuxPRaO+GeEhojSS58ad15tt+1fQUqVb/AM0U9sw/ok0qCmSOS5sQU3ggZGRg1P01WlhUFifXBxmlSrqxWzmyei0Cqzg42bamwsVj8mPT3NKlWqJkkTFZiyjpkVxI4AZWGDSpUWTQ1AS0YG4lm61ZqPCjxkA4xSpVNBYxJOTnn0rmNi3mYdDSpU1bCK4uVUgZ5t3qNc3qQo3nGE9PU0qVFI8Deo8TxxFzvCrGNopUqVK5NFFBM//Z", "bone": "data:image/jpeg;base64,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"};
+function headG(src,x,y,r){return '<g transform="translate('+x+','+y+') scale('+(r/14)+')" clip-path="url(#hclip)"><image href="'+src+'" x="-14" y="-14" width="28" height="28" preserveAspectRatio="xMidYMid slice"/></g><circle cx="'+x+'" cy="'+y+'" r="'+r+'" fill="none" stroke="#14213D" stroke-width="1.5"/>';}
+function robFig(x,y,dir,s){
+  s=s||1;const d=dir||1,L='stroke="#185FA5" stroke-linecap="round"';
+  return '<g transform="translate('+x+','+y+') scale('+s+')">'+
+   '<line x1="0" y1="-8" x2="-8" y2="0" stroke-width="3" '+L+'/><line x1="0" y1="-8" x2="8" y2="0" stroke-width="3" '+L+'/>'+
+   '<line x1="'+(d*10)+'" y1="-30" x2="'+(d*34)+'" y2="-22" stroke-width="3.5" '+L+'/>'+
+   '<line x1="'+(-d*10)+'" y1="-30" x2="'+(-d*16)+'" y2="-14" stroke-width="3.5" '+L+'/>'+
+   '<polygon points="-13,-33 13,-33 0,-8" fill="#B5D4F4" stroke="#185FA5" stroke-width="2.5" stroke-linejoin="round"/>'+
+   headG(IMG.rob,0,-48,15)+'</g>';
+}
+function imgScenes(sc){
+  const g='<line x1="10" y1="66" x2="330" y2="66" stroke="#5B6784" stroke-width="2"/>';
+  return {
+   crate:g+headG(IMG.puppy,168,22,19)+'<rect x="150" y="30" width="36" height="36" fill="#B07A45" stroke="#6B4528" stroke-width="2"/><line x1="150" y1="30" x2="186" y2="66" stroke="#6B4528"/><line x1="186" y1="30" x2="150" y2="66" stroke="#6B4528"/>'+robFig(116,66,1,.95),
+   sled:g+'<rect x="120" y="54" width="90" height="8" rx="3" fill="#B07A45"/><path d="M116 62 Q110 66 122 66" fill="none" stroke="#B07A45" stroke-width="3"/>'+headG(IMG.snow,165,10,48)+'<line x1="210" y1="56" x2="257" y2="45" stroke="#5B6784" stroke-width="2"/>'+robFig(288,66,-1,.95),
+   skate:g+'<rect x="136" y="48" width="68" height="6" rx="3" fill="#7A4BD1"/><circle cx="150" cy="60" r="6" fill="#14213D"/><circle cx="190" cy="60" r="6" fill="#14213D"/>'+headG(IMG.under,170,29,19)+robFig(104,66,1,.95),
+   boxhand:g+headG(IMG.eyes,139,22,18)+'<rect x="120" y="32" width="38" height="34" fill="#B07A45" stroke="#6B4528" stroke-width="2"/>'+robFig(190,66,-1,.95)
+  };
+}
+const GAME_ID='fbd_lb';
+const FB_CFG={apiKey:"AIzaSyCaL4J8MnHl9LsZxn-FR_8eSTm0ILGnxf0",authDomain:"psquare-5025d.firebaseapp.com",databaseURL:"https://psquare-5025d-default-rtdb.firebaseio.com",projectId:"psquare-5025d",storageBucket:"psquare-5025d.firebasestorage.app",messagingSenderId:"857020174119",appId:"1:857020174119:web:8258df64af926d99e16302"};
+let db=null,fbReady=false;
+try{if(window.firebase){firebase.initializeApp(FB_CFG);db=firebase.database();fbReady=true;}}catch(e){console.warn('Firebase unavailable',e);}
+
+const $=id=>document.getElementById(id);
+const rnd=n=>Math.floor(Math.random()*n);
+const shuffle=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=rnd(i+1);[a[i],a[j]]=[a[j],a[i]];}return a;};
+function screen(id){document.querySelectorAll('.screen').forEach(s=>s.classList.toggle('on',s.id===id));window.scrollTo(0,0);}
+
+const FC={Fg:'#7A4BD1',FN:'#12875F',FT:'#E6007E',Ffr:'#D17A00',Fapp:'#0B5FD8',Fsp:'#D9342B',Fm:'#6B7385'};
+const NAME={Fg:'Gravity',FN:'Normal',FT:'Tension',Ffr:'Friction',Fapp:'Applied',Fsp:'Spring'};
+const ORDER=['Fg','FN','FT','Ffr','Fapp','Fsp'];
+const DEFD={Fg:'D',FN:'U',FT:'R',Ffr:'L',Fapp:'R',Fsp:'R'};
+const VEC={U:[0,-1],D:[0,1],L:[-1,0],R:[1,0]};
+const WORD=['off','short','medium','long'];
+const PX=[0,38,66,96],CX=170,CY=128;
+const WHY={Ffr:'Friction points opposite the way the object slides, or is pushed or pulled.',FT:'A rope can only pull, so tension points along the rope.',Fapp:'The applied force points the way the push or pull goes.',Fsp:'A spring pushes the block away from the spring.'};
+
+const SCEN=[
+{id:'book',lv:'easy',kind:'book',obj:'book',title:'Book on a desk',story:'A book sits on a desk.',setup:'A book sits on a desk.',moveText:'It is sitting still.',move:'rest',f:{Fg:['D',2],FN:['U',2]},rules:[['Fg','=','FN',"The book isn't moving up or down, so Gravity and Normal are the same length."]]},
+{id:'chand',lv:'easy',kind:'chand',obj:'chandelier',title:'Chandelier',story:'A chandelier hangs still from the ceiling.',setup:'A chandelier hangs from the ceiling.',moveText:'It is hanging still.',move:'rest',f:{FT:['U',2],Fg:['D',2]},rules:[['FT','=','Fg','It hangs still, so the pull up equals the pull down.']]},
+{id:'crate',lv:'easy',kind:'crate',obj:'crate',title:'Pushing a crate',story:'Mr. Ward pushes a crate to the right and it speeds up.',setup:'Mr. Ward pushes a crate to the right.',moveText:'The crate is moving right.',move:'R',f:{Fapp:['R',3],Ffr:['L',1],Fg:['D',2],FN:['U',2]},rules:[['Fg','=','FN',"The crate isn't moving up or down, so Gravity and Normal match."],['Fapp','>','Ffr','It speeds up to the right, so the push is longer than friction.']]},
+{id:'sled',lv:'easy',kind:'sled',obj:'sled',title:"Murphy's sled",story:"Mr. Ward pulls Murphy's sled to the right with a rope and the sled speeds up.",setup:"Murphy's sled is pulled to the right by a rope.",moveText:'The sled is moving right.',move:'R',f:{FT:['R',3],Ffr:['L',1],Fg:['D',2],FN:['U',2]},rules:[['Fg','=','FN',"The sled isn't moving up or down, so Gravity and Normal match."],['FT','>','Ffr','It speeds up to the right, so the pull is longer than friction.']]},
+{id:'ball',lv:'easy',kind:'ball',obj:'ball',title:'Rolling ball',story:'A ball rolls to the right across a plush carpet and slows down.',setup:'A ball rolls to the right across a plush carpet.',moveText:'The ball is rolling right.',move:'R',f:{Ffr:['L',1],Fg:['D',2],FN:['U',2]},rules:[['Fg','=','FN',"The ball isn't moving up or down, so Gravity and Normal match."]]},
+{id:'skate',lv:'easy',kind:'skate',obj:'skateboard',title:'Skateboard',story:'A student pushes a skateboard to the right at a steady speed.',setup:'A student pushes a skateboard to the right.',moveText:'The skateboard is moving right.',move:'R',f:{Fapp:['R',2],Ffr:['L',2],Fg:['D',2],FN:['U',2]},rules:[['Fg','=','FN',"The skateboard isn't moving up or down, so Gravity and Normal match."],['Fapp','=','Ffr','A steady speed means the push and friction are the same length.']]},
+{id:'sledL',lv:'easy',kind:'sled',flip:true,obj:'sled',title:"Murphy's sled",story:"Mr. Ward pulls Murphy's sled to the left at a steady speed.",setup:"Murphy's sled is pulled to the left by a rope.",moveText:'The sled is moving left.',move:'L',f:{FT:['L',2],Ffr:['R',2],Fg:['D',2],FN:['U',2]},rules:[['Fg','=','FN',"The sled isn't moving up or down, so Gravity and Normal match."],['FT','=','Ffr','A steady speed means the pull and friction are the same length.']]},
+{id:'toss',lv:'easy',kind:'toss',obj:'ball',bogus:'Force of the throw',title:'Tossed ball',story:"A ball has just left a student's hand and is flying upward. Ignore air.",setup:'A ball flies upward after being tossed. Ignore air.',moveText:'The ball is moving up.',move:'U',f:{Fg:['D',2]},rules:[]},
+{id:'spring',lv:'hard',kind:'spring',obj:'block',title:'Spring launcher',story:'A compressed spring pushes a block to the right across a rough table and the block speeds up.',setup:'A compressed spring pushes a block to the right across a rough table.',moveText:'The block is moving right.',move:'R',f:{Fsp:['R',3],Ffr:['L',1],Fg:['D',2],FN:['U',2]},rules:[['Fg','=','FN',"The block isn't moving up or down, so Gravity and Normal match."],['Fsp','>','Ffr','It speeds up to the right, so the spring force beats friction.']]},
+{id:'lift',lv:'hard',kind:'hang',obj:'bucket',title:'Lifting a bucket',story:'A rope lifts a bucket straight up and the bucket speeds up.',setup:'A rope lifts a bucket straight up.',moveText:'The bucket is moving up.',move:'U',f:{FT:['U',3],Fg:['D',2]},rules:[['FT','>','Fg','It speeds up going up, so the rope pulls harder than gravity.']]},
+{id:'lower',lv:'hard',kind:'hang',obj:'bucket',title:'Lowering a bucket',story:'A rope lowers a bucket straight down at a steady speed.',setup:'A rope lowers a bucket straight down.',moveText:'The bucket is moving down.',move:'D',f:{FT:['U',2],Fg:['D',2]},rules:[['FT','=','Fg','A steady speed means the forces balance.']]},
+{id:'car',lv:'hard',kind:'car',obj:'car',title:'Braking car',story:'A car moving to the right brakes on a flat road and slows down.',setup:'A car moving to the right brakes on a flat road.',moveText:'The car is moving right.',move:'R',f:{Ffr:['L',3],Fg:['D',2],FN:['U',2]},rules:[['Fg','=','FN',"The car isn't moving up or down, so Gravity and Normal match."]]},
+{id:'pushback',lv:'hard',kind:'boxhand',obj:'box',title:'Pushing back',story:'A box slides to the right. A student pushes back on it, to the left, and the box slows down.',setup:'A box slides to the right while a student pushes back on it, to the left.',moveText:'The box is sliding right.',move:'R',f:{Fapp:['L',2],Ffr:['L',1],Fg:['D',2],FN:['U',2]},rules:[['Fg','=','FN',"The box isn't moving up or down, so Gravity and Normal match."]]},
+{id:'fall',lv:'hard',kind:'toss',drop:true,obj:'ball',bogus:'Force of falling',title:'Dropped ball',story:'A ball falls straight down after being dropped. Ignore air.',setup:'A ball falls straight down after being dropped. Ignore air.',moveText:'The ball is moving down.',move:'D',f:{Fg:['D',2]},rules:[]},
+{id:'lowerslow',lv:'hard',kind:'hang',obj:'bucket',title:'Slowing a bucket',story:'A rope lowers a bucket straight down and the bucket slows down.',setup:'A rope lowers a bucket straight down.',moveText:'The bucket is moving down.',move:'D',f:{FT:['U',3],Fg:['D',2]},rules:[['FT','>','Fg','It slows down while moving down, so the net force points up: the rope pulls harder.']]},
+{id:'sledfast',lv:'hard',kind:'sled',flip:true,obj:'sled',title:'Sprint sled',story:"Murphy's sled is pulled to the left and speeds up on slick snow.",setup:"Murphy's sled is pulled to the left on slick snow.",moveText:'The sled is moving left.',move:'L',f:{FT:['L',3],Ffr:['R',1],Fg:['D',2],FN:['U',2]},rules:[['Fg','=','FN',"The sled isn't moving up or down, so Gravity and Normal match."],['FT','>','Ffr','It speeds up to the left, so the pull is longer than friction.']]}
+];
+const arrowsOf=sc=>Object.entries(sc.f).map(([key,[d,l]])=>({key,d,l}));
+function predictAnswer(sc){let nx=0,ny=0;for(const [,[d,l]] of Object.entries(sc.f)){nx+=VEC[d][0]*l;ny+=VEC[d][1]*l;}
+  if(nx===0&&ny===0)return'same';
+  const v=sc.move==='rest'?[0,0]:VEC[sc.move];const dot=nx*v[0]+ny*v[1];return dot>0?'faster':dot<0?'slower':'same';}
+
+function sceneSVG(sc){
+  const g='<line x1="10" y1="66" x2="330" y2="66" stroke="#5B6784" stroke-width="2"/>';
+  const K={
+   book:g+'<rect x="110" y="56" width="120" height="10" fill="#B07A45"/><rect x="140" y="42" width="60" height="14" rx="2" fill="#0B5FD8"/><rect x="146" y="46" width="48" height="3" fill="#fff"/>',
+   chand:'<rect x="90" y="4" width="160" height="8" fill="#5B6784"/><line x1="170" y1="12" x2="170" y2="38" stroke="#5B6784" stroke-width="3"/><ellipse cx="170" cy="48" rx="34" ry="9" fill="#D9A400"/><line x1="140" y1="50" x2="132" y2="64" stroke="#D9A400" stroke-width="3"/><line x1="200" y1="50" x2="208" y2="64" stroke="#D9A400" stroke-width="3"/><line x1="170" y1="52" x2="170" y2="68" stroke="#D9A400" stroke-width="3"/>',
+   crate:g+'<rect x="150" y="30" width="36" height="36" fill="#B07A45" stroke="#6B4528" stroke-width="2"/><line x1="150" y1="30" x2="186" y2="66" stroke="#6B4528"/><line x1="186" y1="30" x2="150" y2="66" stroke="#6B4528"/><circle cx="108" cy="22" r="8" fill="#B5D4F4" stroke="#185FA5"/><line x1="108" y1="30" x2="108" y2="52" stroke="#185FA5" stroke-width="3"/><line x1="108" y1="52" x2="100" y2="66" stroke="#185FA5" stroke-width="3"/><line x1="108" y1="52" x2="116" y2="66" stroke="#185FA5" stroke-width="3"/><line x1="108" y1="36" x2="146" y2="44" stroke="#185FA5" stroke-width="3"/>',
+   sled:g+'<rect x="120" y="54" width="90" height="8" rx="2" fill="#B07A45"/><path d="M116 62 Q110 66 122 66" fill="none" stroke="#B07A45" stroke-width="3"/><circle cx="165" cy="40" r="12" fill="#D9A066" stroke="#8A5A2B"/><path d="M155 32 L150 46 L158 42Z" fill="#8A5A2B"/><circle cx="170" cy="38" r="2" fill="#14213D"/><line x1="210" y1="56" x2="270" y2="46" stroke="#5B6784" stroke-width="2"/><circle cx="280" cy="30" r="8" fill="#B5D4F4" stroke="#185FA5"/><line x1="280" y1="38" x2="280" y2="58" stroke="#185FA5" stroke-width="3"/>',
+   ball:g+'<path d="M10 66 l8 -4 l8 4 l8 -4 l8 4 l8 -4 l8 4 l8 -4 l8 4 l8 -4 l8 4 l8 -4 l8 4 l8 -4 l8 4 l8 -4 l8 4 l8 -4 l8 4 l8 -4 l8 4 l8 -4 l8 4 l8 -4 l8 4 l8 -4 l8 4 l8 -4 l8 4 l8 -4 l8 4 l8 -4 l8 4 l8 -4 l8 4 l8 -4 l8 4" fill="none" stroke="#12875F" stroke-width="3"/><circle cx="170" cy="48" r="16" fill="#F5A300" stroke="#14213D" stroke-width="2"/><path d="M160 42 Q170 36 180 42" fill="none" stroke="#14213D" stroke-width="2"/>',
+   skate:g+'<rect x="136" y="48" width="68" height="6" rx="3" fill="#7A4BD1"/><circle cx="150" cy="60" r="6" fill="#14213D"/><circle cx="190" cy="60" r="6" fill="#14213D"/><circle cx="100" cy="22" r="8" fill="#B5D4F4" stroke="#185FA5"/><line x1="100" y1="30" x2="100" y2="52" stroke="#185FA5" stroke-width="3"/><line x1="100" y1="52" x2="94" y2="66" stroke="#185FA5" stroke-width="3"/><line x1="100" y1="52" x2="108" y2="66" stroke="#185FA5" stroke-width="3"/><line x1="100" y1="36" x2="132" y2="46" stroke="#185FA5" stroke-width="3"/>',
+   toss:'<line x1="10" y1="72" x2="330" y2="72" stroke="#5B6784" stroke-width="2"/><circle cx="170" cy="'+(sc.drop?'24':'40')+'" r="14" fill="#F5A300" stroke="#14213D" stroke-width="2"/><path d="M162 '+(sc.drop?'18':'34')+' Q170 '+(sc.drop?'12':'28')+' 178 '+(sc.drop?'18':'34')+'" fill="none" stroke="#14213D" stroke-width="2"/>',
+   spring:g+'<rect x="40" y="18" width="10" height="48" fill="#5B6784"/><path d="M50 42 l8 -12 l10 24 l10 -24 l10 24 l10 -24 l10 24 l8 -12" fill="none" stroke="#D9342B" stroke-width="3"/><rect x="146" y="30" width="42" height="36" fill="#7A4BD1" stroke="#3D2A7A" stroke-width="2"/>',
+   hang:'<rect x="120" y="4" width="100" height="8" fill="#5B6784"/><line x1="170" y1="12" x2="170" y2="42" stroke="#5B6784" stroke-width="3"/><path d="M152 42 h36 l-4 28 h-28Z" fill="#1D9E75" stroke="#0F6E56" stroke-width="2"/><path d="M156 42 Q170 28 184 42" fill="none" stroke="#0F6E56" stroke-width="3"/>',
+   car:g+'<rect x="130" y="40" width="84" height="20" rx="5" fill="#D9342B"/><path d="M146 40 l10 -14 h32 l10 14Z" fill="#D9342B"/><rect x="160" y="30" width="14" height="10" fill="#EAF0FF"/><rect x="178" y="30" width="14" height="10" fill="#EAF0FF"/><circle cx="148" cy="60" r="8" fill="#14213D"/><circle cx="198" cy="60" r="8" fill="#14213D"/>',
+   boxhand:g+'<rect x="120" y="32" width="38" height="34" fill="#B07A45" stroke="#6B4528" stroke-width="2"/><rect x="190" y="38" width="14" height="14" rx="4" fill="#F4C79B" stroke="#8A5A2B"/><line x1="204" y1="45" x2="250" y2="45" stroke="#185FA5" stroke-width="6"/><circle cx="262" cy="30" r="8" fill="#B5D4F4" stroke="#185FA5"/><line x1="262" y1="38" x2="262" y2="58" stroke="#185FA5" stroke-width="3"/>'
+  };
+  Object.assign(K,imgScenes(sc));let inner=K[sc.kind]||g;
+  if(sc.flip)inner='<g transform="translate(340,0) scale(-1,1)">'+inner+'</g>';
+  return inner;
+}
+
+const col=k=>FC[k]||'#6B7385';
+function padSVG(arrows,mark){
+  let s='<defs>'+Object.keys(FC).map(k=>'<marker id="mk'+k+'" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M1 1L9 5L1 9Z" fill="'+FC[k]+'"/></marker>').join('')+'</defs>';
+  s+='<rect x="0" y="0" width="340" height="260" rx="12" fill="#F7FAFF"/>';
+  const grp={};arrows.forEach((a,i)=>{if(a.l)(grp[a.d]=grp[a.d]||[]).push(i);});
+  const off={};Object.values(grp).forEach(ix=>ix.forEach((i,j)=>{off[i]=(j-(ix.length-1)/2)*18;}));
+  const geo=(a,i)=>{const v=VEC[a.d],L=PX[a.l],o=off[i]||0,ox=v[0]?0:o,oy=v[1]?0:o;return{v,ox,oy,x1:CX+ox,y1:CY+oy,x2:CX+v[0]*L+ox,y2:CY+v[1]*L+oy};};
+  arrows.forEach((a,i)=>{
+    if(!a.l)return;const g=geo(a,i),v=g.v;
+    s+='<line x1="'+g.x1+'" y1="'+g.y1+'" x2="'+g.x2+'" y2="'+g.y2+'" stroke="'+col(a.key)+'" stroke-width="6" stroke-linecap="round" marker-end="url(#mk'+a.key+')"/>';
+    let tx=g.x2,ty=g.y2,an='middle';
+    if(v[0]>0){tx=g.x2+9;ty=g.y2+5;an='start';}else if(v[0]<0){tx=g.x2-9;ty=g.y2+5;an='end';}else if(v[1]>0){ty=g.y2+20;}else{ty=g.y2-10;}
+    s+='<text x="'+tx+'" y="'+ty+'" text-anchor="'+an+'" font-size="14" font-weight="700" fill="#14213D">'+(a.label||NAME[a.key])+'</text>';
+    if(mark&&mark.includes(i))s+='<circle cx="'+g.x2+'" cy="'+g.y2+'" r="14" fill="none" stroke="#D9342B" stroke-width="4"/>';
+  });
+  s+='<circle cx="'+CX+'" cy="'+CY+'" r="10" fill="#14213D"/>';
+  arrows.forEach((a,i)=>{if(!a.l)return;const g=geo(a,i),v=g.v;
+    const sx=g.x1+v[0]*14,sy=g.y1+v[1]*14,ex=g.x2+v[0]*8,ey=g.y2+v[1]*8;
+    const x0=Math.min(sx,ex)-(v[0]?0:9),y0=Math.min(sy,ey)-(v[1]?0:9),w=Math.abs(ex-sx)+(v[0]?0:18),h=Math.abs(ey-sy)+(v[1]?0:18);
+    s+='<rect data-i="'+i+'" x="'+x0+'" y="'+y0+'" width="'+w+'" height="'+h+'" fill="rgba(0,0,0,0.001)" style="cursor:pointer"/>';});
+  return s;
+}
+
+const COLORS=[{id:'ink',n:'Ink Black',hex:'#1A1A1A',p:0},{id:'subway',n:'Subway Green',hex:'#00933C',p:15},{id:'taxi',n:'Taxi Yellow',hex:'#D99A00',p:20},{id:'liberty',n:'Liberty Gold',hex:'#A67C00',p:35},{id:'copper',n:'Statue Copper',hex:'#B4532A',p:50},{id:'navy',n:'Yankee Navy',hex:'#1F3A93',p:65},{id:'red',n:'Times Square Red',hex:'#D62828',p:80}];
+const HATS=[{id:'beanie',n:'Beanie',p:25},{id:'cowboy',n:'Cowboy hat',p:45},{id:'tophat',n:'Top hat',p:70},{id:'crown',n:'Crown',p:110},{id:'helmet',n:'Space helmet',p:160}];
+function hatSVG(h){
+  switch(h){
+   case'beanie':return '<path d="M30 46 Q60 6 90 46Z" fill="#D9342B"/><rect x="28" y="44" width="64" height="9" rx="4" fill="#fff"/><circle cx="60" cy="12" r="6" fill="#fff"/>';
+   case'cowboy':return '<ellipse cx="60" cy="44" rx="46" ry="9" fill="#8A5A2B"/><path d="M38 44 Q40 16 60 18 Q80 16 82 44Z" fill="#A9712F"/><rect x="38" y="38" width="44" height="5" fill="#5B3A18"/>';
+   case'tophat':return '<ellipse cx="60" cy="44" rx="36" ry="7" fill="#14213D"/><rect x="38" y="8" width="44" height="36" fill="#14213D"/><rect x="38" y="32" width="44" height="6" fill="#D9342B"/>';
+   case'crown':return '<path d="M34 46 L36 18 L48 32 L60 12 L72 32 L84 18 L86 46Z" fill="#F5C400" stroke="#B88A00" stroke-width="2"/><circle cx="60" cy="38" r="4" fill="#D9342B"/>';
+   case'helmet':return '<circle cx="60" cy="62" r="50" fill="rgba(120,180,255,.25)" stroke="#9AB8E8" stroke-width="4"/><path d="M26 86 Q60 112 94 86" fill="none" stroke="#9AB8E8" stroke-width="5"/>';
+  }return '';
+}
+function dogSVG(hat){
+  return '<svg viewBox="0 0 120 120" width="100%" role="img" aria-label="Murphy the dog"><ellipse cx="28" cy="58" rx="13" ry="22" transform="rotate(18 28 58)" fill="#8A5A2B"/><ellipse cx="92" cy="58" rx="13" ry="22" transform="rotate(-18 92 58)" fill="#8A5A2B"/><circle cx="60" cy="68" r="34" fill="#D9A066"/><ellipse cx="60" cy="82" rx="18" ry="13" fill="#F1CDA2"/><circle cx="60" cy="75" r="5.5" fill="#14213D"/><circle cx="47" cy="62" r="4.5" fill="#14213D"/><circle cx="73" cy="62" r="4.5" fill="#14213D"/><circle cx="48.5" cy="60.5" r="1.4" fill="#fff"/><circle cx="74.5" cy="60.5" r="1.4" fill="#fff"/><path d="M52 86 Q60 93 68 86" fill="none" stroke="#14213D" stroke-width="2.5" stroke-linecap="round"/><path d="M57 90 q3 9 6 0Z" fill="#E6007E"/>'+hatSVG(hat)+'</svg>';
+}
+
+const G={ini:'',diff:'easy',qs:[],qi:0,score:0,base:0,streak:0,res:[],cur:null,done:false,sound:true,from:'s-home',lbTab:'easy',tapFn:null};
+const rk=i=>'fbd_rec_'+i;
+function rec(i){let r=null;try{r=JSON.parse(localStorage.getItem(rk(i)));}catch(e){}return Object.assign({cash:0,colors:['ink'],color:'ink',hats:[],hat:'',day:'',today:0,pz:{stars:{}}},r||{});}
+function saveRec(i,r){try{localStorage.setItem(rk(i),JSON.stringify(r));}catch(e){}}
+const today=()=>new Date().toLocaleDateString('en-CA');
+const BLOCK=['ASS','SEX','FUK','FCK','FUC','DIK','TIT','KKK','NIG','FAG','CUM','WTF','SHT','BCH','HOE','SUK','DMN'];
+const isBlocked=s=>BLOCK.includes(s);
+
+let AC=null;
+function beep(f,d,type,v,t0){if(!G.sound)return;try{AC=AC||new(window.AudioContext||window.webkitAudioContext)();const o=AC.createOscillator(),g=AC.createGain();o.type=type||'sine';o.frequency.value=f;g.gain.value=v||.07;o.connect(g);g.connect(AC.destination);const t=AC.currentTime+(t0||0);o.start(t);g.gain.exponentialRampToValueAtTime(.0001,t+d);o.stop(t+d+.02);}catch(e){}}
+const sGood=()=>{beep(660,.12);beep(880,.2,'sine',.07,.1);};
+const sBad=()=>beep(160,.28,'sawtooth',.05);
+const sShutter=()=>{beep(1400,.04,'square',.05);beep(700,.07,'square',.05,.06);};
+
+function dogs(){const r=G.ini?rec(G.ini):null;const h=r?r.hat:'';['homeDog','shopDog','resDog'].forEach(id=>{$(id).innerHTML='<img src="'+IMG.bone+'" alt="Murphy with a rainbow bone" style="width:100%;border-radius:50%;border:3px solid #14213D;display:block">';});}
+
+/* ---------- home ---------- */
+const NAMES=["Aditya", "Alden", "Alec", "Alex Be.", "Alex Br.", "Ammar", "Andy", "Ari", "Benjamin", "Bode", "Cam", "Chad", "Cyrus", "David", "Dean C.", "Dean H.", "Dilan", "Drew", "Dylan", "Eric", "Henry", "Immanuel", "James", "Jamie", "Jeeva", "John", "Joshua", "Julien", "Kamran", "Lawrence", "Luke La.", "Luke Se.", "Luke St.", "Masen", "Matthew", "Max", "Oliver", "Peter", "Preston", "Quentin", "Rafay", "Reid D.", "Reid G.", "Saahil", "Sam", "Sidney", "Stan", "Timothy", "Viaan", "Wayne", "Will", "William", "Zaki"];
+const fbKey=s=>String(s).replace(/[.#$\[\]\/]/g,'').replace(/\s+/g,'_');
+const iniEl=$('ini');
+iniEl.innerHTML='<option value="">Pick your name...</option>'+NAMES.map(n=>'<option>'+n+'</option>').join('');
+iniEl.value=(()=>{try{const v=localStorage.getItem('fbd_last')||'';return NAMES.includes(v)?v:'';}catch(e){return'';}})();
+function homeInfo(){const v=iniEl.value;$('homeErr').style.display='none';
+  if(NAMES.includes(v)){G.ini=v;const r=rec(v);$('homeCash').textContent=CASH_ON?'Class Cash: '+r.cash:'';}else{$('homeCash').textContent='';}
+  dogs();}
+iniEl.addEventListener('change',homeInfo);
+function needInitials(){const v=iniEl.value;
+  if(!NAMES.includes(v)){const e=$('homeErr');e.textContent='Pick your name first.';e.style.display='block';return false;}
+  G.ini=v;try{localStorage.setItem('fbd_last',v);}catch(e){}
+  const r=rec(v);if(LB_ON&&fbReady&&r.color!=='ink'){const c=COLORS.find(x=>x.id===r.color);if(c)db.ref(GAME_ID+'/playerColors/'+fbKey(v)).set(c.hex).catch(()=>{});}
+  return true;}
+$('btnPlay').onclick=()=>{if(needInitials()){$('modeWho').textContent='Playing as '+G.ini;screen('s-mode');}};
+$('btnHS').onclick=()=>{G.from='s-home';openHS();};
+$('btnShop').onclick=()=>{if(needInitials()){G.from='s-home';openShop();}};
+$('btnHow').onclick=()=>screen('s-how');
+$('howBack').onclick=()=>{try{localStorage.setItem('fbd_seen','1');}catch(e){}screen('s-home');};
+$('btnSound').onclick=()=>{G.sound=!G.sound;$('btnSound').textContent='Sound: '+(G.sound?'on':'off');};
+$('modeBack').onclick=()=>screen('s-home');
+$('bustBack').onclick=()=>{iniEl.value='';homeInfo();screen('s-home');};
+$('mEasy').onclick=()=>startRound('easy');
+$('mHard').onclick=()=>startRound('hard');
+
+/* ---------- round ---------- */
+const SEQ=['build','predict','spot','build','predict','spot','build','predict','spot'];
+function startRound(diff){
+  G.diff=diff;G.qi=0;G.score=0;G.base=0;G.streak=0;G.res=[];
+  const pool=SCEN.filter(s=>s.lv===diff);let order=[];
+  while(order.length<9)order=order.concat(shuffle(pool));
+  G.qs=SEQ.map((type,i)=>({type,sc:order[i]}));
+  nextQ();
+}
+function hud(){$('hQ').textContent='Question '+(G.qi+1)+' of 9'+(G.diff==='hard'?' · Hard':' · Easy');$('hScore').textContent='Score '+G.score+(G.streak>=2?' · Streak '+G.streak:'');}
+function nextQ(){
+  if(G.qi>=9)return finishRound();
+  const q=G.qs[G.qi];G.cur=q;G.done=false;q.att=0;
+  $('qFb').style.display='none';$('btnNext').style.display='none';$('btnNext').textContent=G.qi===8?'See results':'Next question';
+  $('scene').setAttribute('viewBox',q.sc.kind==='sled'?'0 -44 340 124':'0 0 340 80');$('scene').innerHTML=sceneSVG(q.sc);$('scene').setAttribute('aria-label',q.sc.title);
+  hud();screen('s-q');
+  if(q.type==='build')renderBuild(q);else if(q.type==='spot')renderSpot(q);else renderPredict(q);
+}
+function fb(kind,html){const f=$('qFb');f.className='fb '+kind;f.innerHTML=html;f.style.display='block';}
+function resolve(points,first,html,kind){
+  G.done=true;G.base+=points;let bonus=0;
+  if(first&&points===100){G.streak++;bonus=G.streak>=2?Math.min(G.streak-1,5)*10:0;}else G.streak=0;
+  G.score+=points+bonus;G.res.push({type:G.cur.type,points});
+  hud();fb(kind||'ok',html+(points?'<br><b>+'+points+(bonus?' +'+bonus+' streak bonus':'')+'</b>':''));
+  (points?sGood:sBad)();
+  $('btnNext').style.display='block';$('btnNext').focus();
+}
+$('btnNext').onclick=()=>{G.qi++;nextQ();};
+document.addEventListener('keydown',e=>{if(e.key==='Enter'&&$('s-q').classList.contains('on')&&$('btnNext').style.display!=='none'){e.preventDefault();$('btnNext').click();}});
+function whyText(sc){return sc.rules.map(r=>r[3]).join(' ')||'Only gravity acts on it, so there is just one arrow.';}
+
+/* build it */
+function renderBuild(q){
+  const sc=q.sc;q.S={};ORDER.forEach(k=>q.S[k]=0);
+  $('qTag').textContent='Build it';$('qStory').textContent=sc.story;
+  $('qArea').innerHTML='<p style="margin:0 0 4px;font-weight:700">Build the diagram for the '+sc.obj+'.</p><p class="muted" style="margin:0;font-size:14px">Tap a force to add it. Tap again to make it longer.</p><svg id="pad" viewBox="0 0 340 260" width="100%" role="img" aria-label="Free-body diagram pad" style="margin-top:8px"></svg><div class="chips" id="chips"></div><div class="row"><button class="btn pri" id="bCheck">Check my diagram</button><button class="btn" id="bClear" style="flex:0 0 100px">Clear</button></div>';
+  const draw=()=>{const arr=ORDER.filter(k=>q.S[k]).map(k=>({key:k,d:(sc.f[k]?sc.f[k][0]:DEFD[k]),l:q.S[k]}));$('pad').innerHTML=padSVG(arr);
+    $('chips').innerHTML='';ORDER.forEach(k=>{const b=document.createElement('button');b.className='chip'+(q.S[k]?' on':'');b.style.borderColor=q.S[k]?col(k):'';
+      b.innerHTML='<span><span class="dot" style="background:'+col(k)+'"></span>'+NAME[k]+'</span><span class="st">'+WORD[q.S[k]]+'</span>';
+      b.onclick=()=>{if(G.done)return;q.S[k]=(q.S[k]+1)%4;$('qFb').style.display='none';draw();};$('chips').appendChild(b);});};
+  draw();
+  $('bClear').onclick=()=>{if(G.done)return;ORDER.forEach(k=>q.S[k]=0);$('qFb').style.display='none';draw();};
+  $('bCheck').onclick=()=>{if(G.done)return;
+    const req=Object.keys(sc.f),have=ORDER.filter(k=>q.S[k]);
+    if(!have.length){fb('info','Add at least one force first.');return;}
+    const missing=req.filter(k=>!q.S[k]),extra=have.filter(k=>!sc.f[k]);
+    let msg='';
+    if(missing.length)msg=q.att>=1?('You need '+req.length+' force'+(req.length>1?'s':'')+' in total. Ask what touches the '+sc.obj+', and what pulls on it from far away.'):'A force is missing. What touches the '+sc.obj+'? What pulls on it from far away?';
+    else if(extra.length)msg=NAME[extra[0]]+" doesn't belong here. What would be exerting it on the "+sc.obj+'?';
+    else{const bad=sc.rules.find(r=>{const a=q.S[r[0]],b=q.S[r[2]];return r[1]==='='?a!==b:a<=b;});if(bad)msg=bad[3];}
+    if(!msg){const pts=[100,60,30][q.att];resolve(pts,q.att===0,'Correct! '+whyText(sc));return;}
+    q.att++;
+    if(q.att>=3){$('pad').innerHTML=padSVG(arrowsOf(sc));resolve(0,false,'Here is the answer. '+whyText(sc),'no');return;}
+    fb('no',msg+'<br><span style="font-size:13px">Try again ('+(3-q.att)+' left).</span>');sBad();};
+}
+
+/* spot the mistake */
+function makeSpot(sc){
+  const base=arrowsOf(sc).map(a=>Object.assign({},a));const opts=[];
+  // extra
+  {const un=['Fapp','Ffr','FT','Fsp'].filter(k=>!sc.f[k]);const choices=[];
+   if(sc.move!=='rest')choices.push({key:'Fm',d:sc.move,l:2,label:sc.bogus||'Force of motion',why:'Motion is not a force. Only draw forces that something exerts on the object.'});
+   un.forEach(k=>choices.push({key:k,d:DEFD[k],l:2,why:'Nothing is exerting a '+NAME[k].toLowerCase()+' force here.'}));
+   if(choices.length)opts.push(()=>{const c=choices[rnd(choices.length)];const shown=base.concat([{key:c.key,d:c.d,l:c.l,label:c.label}]);return{shown,ok:[shown.length-1],text:c.why};});}
+  // direction
+  {const keys=base.map((a,i)=>[a,i]).filter(([a])=>a.key!=='Fg'&&a.key!=='FN');
+   if(keys.length)opts.push(()=>{const [a,i]=keys[rnd(keys.length)];const shown=base.map(x=>Object.assign({},x));const f={U:'D',D:'U',L:'R',R:'L'};shown[i].d=f[a.d];return{shown,ok:[i],text:NAME[a.key]+' points the wrong way. '+(WHY[a.key]||'')};});}
+  // length
+  {const rl=sc.rules.filter(r=>r[1]==='='||r[1]==='>');
+   if(rl.length)opts.push(()=>{const r=rl[rnd(rl.length)];const shown=base.map(x=>Object.assign({},x));const ia=shown.findIndex(x=>x.key===r[0]),ib=shown.findIndex(x=>x.key===r[2]);
+     if(r[1]==='='){shown[ib].l=shown[ia].l===3?2:3;}else{const t=shown[ia].l;shown[ia].l=shown[ib].l;shown[ib].l=t;}
+     return{shown,ok:[ia,ib],text:'One arrow is the wrong length. '+r[3]};});}
+  // missing
+  if(base.length>1)opts.push(()=>{const i=rnd(base.length);const shown=base.filter((_,j)=>j!==i);return{shown,ok:[],missing:true,text:'The '+NAME[base[i].key].toLowerCase()+' force is missing.'};});
+  return opts[rnd(opts.length)]();
+}
+function renderSpot(q){
+  const sc=q.sc;q.sp=makeSpot(sc);
+  $('qTag').textContent='Spot the mistake';$('qStory').textContent=sc.story;
+  $('qArea').innerHTML='<p style="margin:0 0 4px;font-weight:700">This diagram has one mistake.</p><p class="muted" style="margin:0;font-size:14px">Tap the arrow that is wrong. If a force is missing, tap the button.</p><svg id="pad" viewBox="0 0 340 260" width="100%" role="img" aria-label="Diagram with one mistake" style="margin-top:8px"></svg><button class="btn" id="bMiss">A force is missing</button>';
+  $('pad').innerHTML=padSVG(q.sp.shown);
+  const reveal=()=>{if(q.sp.missing){$('pad').innerHTML=padSVG(arrowsOf(sc));}else $('pad').innerHTML=padSVG(q.sp.shown,q.sp.ok);};
+  const guess=(good)=>{if(G.done)return;
+    if(good){resolve(q.att===0?100:50,q.att===0,'Yes! '+q.sp.text);reveal();return;}
+    q.att++;if(q.att>=2){reveal();resolve(0,false,'The mistake was: '+q.sp.text,'no');return;}
+    fb('no','Not that one. Look again. <span style="font-size:13px">(1 try left)</span>');sBad();};
+  $('pad').onclick=e=>{const t=e.target.closest('[data-i]');if(t)guess(q.sp.ok.includes(+t.dataset.i));};
+  $('bMiss').onclick=()=>guess(!!q.sp.missing);
+}
+
+/* predict the motion */
+function renderPredict(q){
+  const sc=q.sc;q.ans=predictAnswer(sc);
+  $('qTag').textContent='Predict the motion';$('qStory').textContent=sc.setup+' '+sc.moveText;
+  $('qArea').innerHTML='<p style="margin:0 0 4px;font-weight:700">Here are the forces on the '+sc.obj+'. What happens to its motion?</p><svg id="pad" viewBox="0 0 340 260" width="100%" role="img" aria-label="Free-body diagram" style="margin-top:8px"></svg><div id="opts"></div>';
+  $('pad').innerHTML=padSVG(arrowsOf(sc));
+  const O=[['faster','Speeds up'],['slower','Slows down'],['same','Keeps the same velocity']];
+  O.forEach(([k,t])=>{const b=document.createElement('button');b.className='optbtn';b.textContent=t;b.dataset.k=k;
+    b.onclick=()=>{if(G.done)return;
+      const why=q.ans==='same'?'The arrows balance, so the net force is zero and the motion does not change.':q.ans==='faster'?'The longer arrow points the way it is moving, so it speeds up.':'The longer arrow points against the motion, so it slows down.';
+      if(k===q.ans){b.classList.add('good');resolve(q.att===0?100:50,q.att===0,'Correct! '+why);return;}
+      b.classList.add('bad');q.att++;
+      if(q.att>=2){[...document.querySelectorAll('#opts .optbtn')].find(x=>x.dataset.k===q.ans).classList.add('good');resolve(0,false,'The answer was "'+O.find(o=>o[0]===q.ans)[1]+'". '+why,'no');return;}
+      fb('no','Not quite. Compare the longest arrow with the way it is moving. <span style="font-size:13px">(1 try left)</span>');sBad();};
+    $('opts').appendChild(b);});
+}
+
+/* ---------- results ---------- */
+let posted=false;
+function finishRound(){
+  const r=rec(G.ini);const t=today();if(r.day!==t){r.day=t;r.today=0;}
+  const max=G.diff==='hard'?20:8,raw=Math.round(G.base/900*max),cap=60;
+  const earn=CASH_ON?Math.max(0,Math.min(raw,cap-r.today)):0;r.cash+=earn;r.today+=earn;saveRec(G.ini,r);
+  const cnt=ty=>{const a=G.res.filter(x=>x.type===ty);return a.filter(x=>x.points===100).length+'/'+a.length;};
+  $('resTitle').textContent=G.score>=800?'Fantastic round!':G.score>=500?'Nice work!':'Keep practicing';
+  $('resScore').textContent=G.score;
+  $('resSub').textContent=G.ini+' · '+(G.diff==='hard'?'Hard':'Easy')+' · Build '+cnt('build')+', Spot '+cnt('spot')+', Predict '+cnt('predict')+' first try';
+  $('resCash').style.display=CASH_ON?'block':'none';$('resCash').innerHTML=earn>0?'💰 You earned <b>'+earn+' Class Cash</b>. Balance: <b>'+r.cash+'</b>.'+(r.today>=cap?' <span class="muted">(Daily cap reached.)</span>':''):(raw>0?'Daily Class Cash cap reached. Balance: <b>'+r.cash+'</b>.':'No Class Cash this time. Balance: <b>'+r.cash+'</b>.');
+  if(!CASH_ON)$('resCash').innerHTML='';
+  dogs();if(LB_ON){G.lbTab=G.diff;tabs('resTabs',G.lbTab);loadLB(G.lbTab,'resLB');}
+  posted=false;if(LB_ON)postScore();screen('s-res');
+}
+function postScore(){
+  const st=$('resPost'),rb=$('resRetry');rb.style.display='none';
+  if(!fbReady){st.textContent='Leaderboard is not connected.';return;}
+  st.textContent='Posting your score...';
+  db.ref(GAME_ID+'/'+G.diff).push({initials:G.ini,score:G.score,ts:Date.now()}).then(()=>{posted=true;st.textContent='Posted to the leaderboard!';loadLB(G.lbTab,'resLB');}).catch(()=>{st.textContent="Couldn't post your score.";rb.style.display='block';});
+}
+$('resRetry').onclick=postScore;
+$('resAgain').onclick=()=>screen('s-mode');
+$('resHome').onclick=()=>{homeInfo();screen('s-home');};
+$('resShop').onclick=()=>{G.from='s-res';openShop();};
+
+/* ---------- leaderboard ---------- */
+function tabs(id,d){document.querySelectorAll('#'+id+' button').forEach(b=>b.classList.toggle('on',b.dataset.d===d));}
+function loadLB(diff,bodyId){
+  const body=$(bodyId),pzm=diff==='puzzles',key=pzm?'stars':'score';
+  if(!fbReady){body.innerHTML='<tr><td colspan="3" class="muted">Leaderboard is not connected.</td></tr>';return;}
+  body.innerHTML='<tr><td colspan="3" class="muted">Loading...</td></tr>';
+  Promise.all([db.ref(GAME_ID+'/'+diff).orderByChild(key).limitToLast(10).once('value'),db.ref(GAME_ID+'/playerColors').once('value')]).then(([snap,cs])=>{
+    const colors=cs.val()||{},arr=[];snap.forEach(c=>{arr.push(c.val());});arr.sort((a,b)=>b[key]-a[key]);
+    if(!arr.length){body.innerHTML='<tr><td colspan="3" class="muted">No scores yet. Be the first!</td></tr>';return;}
+    body.innerHTML=arr.map((e,i)=>'<tr><td>'+(i+1)+'</td><td style="font-weight:700;color:'+(/^#[0-9A-Fa-f]{6}$/.test(colors[e.initials]||'')?colors[e.initials]:'#1A1A1A')+'">'+String(e.initials).replace(/[^A-Za-z .]/g,'')+'</td><td>'+(+e[key]||0)+(pzm?' ★':'')+'</td></tr>').join('');
+  }).catch(()=>{body.innerHTML='<tr><td colspan="3" class="muted">Could not load scores.</td></tr>';});
+}
+function openHS(){G.lbTab='easy';tabs('hsTabs','easy');loadLB('easy','hsLB');screen('s-hs');}
+['resTabs','hsTabs'].forEach(id=>$(id).addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;G.lbTab=b.dataset.d;tabs(id,G.lbTab);loadLB(G.lbTab,id==='hsTabs'?'hsLB':'resLB');}));
+$('hsBack').onclick=()=>{if(G.from==='s-home')homeInfo();screen(G.from);};
+
+/* ---------- shop ---------- */
+function openShop(){renderShop();screen('s-shop');}
+function renderShop(){
+  const r=rec(G.ini);$('shopCash').textContent=r.cash+' Class Cash';$('shopWho').textContent='Shopping as '+G.ini;dogs();
+  const cEl=$('shopColors');cEl.innerHTML='';
+  COLORS.forEach(c=>{const own=r.colors.includes(c.id),eq=r.color===c.id;const row=document.createElement('div');row.className='shopitem';
+    row.innerHTML='<div class="nm" style="color:'+c.hex+'">'+G.ini+'<small>'+c.n+'</small></div>';
+    const b=document.createElement('button');b.className='btn sm';
+    if(eq){b.textContent='Equipped';b.disabled=true;}else if(own){b.textContent='Equip';b.onclick=()=>{r.color=c.id;saveRec(G.ini,r);if(fbReady)db.ref(GAME_ID+'/playerColors/'+fbKey(G.ini)).set(c.hex).catch(()=>{});renderShop();};}
+    else{b.textContent='Buy $'+c.p;b.onclick=()=>{if(r.cash<c.p){b.textContent='Need $'+(c.p-r.cash)+' more';return;}r.cash-=c.p;r.colors.push(c.id);saveRec(G.ini,r);renderShop();};}
+    row.appendChild(b);cEl.appendChild(row);});
+  const hEl=$('shopHats');hEl.innerHTML='';
+  const none=document.createElement('div');none.className='shopitem';none.innerHTML='<div class="nm">No hat<small>Murphy goes bare</small></div>';
+  const nb=document.createElement('button');nb.className='btn sm';if(!r.hat){nb.textContent='Equipped';nb.disabled=true;}else{nb.textContent='Equip';nb.onclick=()=>{r.hat='';saveRec(G.ini,r);renderShop();};}
+  none.appendChild(nb);hEl.appendChild(none);
+  HATS.forEach(h=>{const own=r.hats.includes(h.id),eq=r.hat===h.id;const row=document.createElement('div');row.className='shopitem';
+    row.innerHTML='<div style="flex:0 0 54px">'+dogSVG(h.id)+'</div><div class="nm">'+h.n+'</div>';
+    const b=document.createElement('button');b.className='btn sm';
+    if(eq){b.textContent='Equipped';b.disabled=true;}else if(own){b.textContent='Equip';b.onclick=()=>{r.hat=h.id;saveRec(G.ini,r);renderShop();};}
+    else{b.textContent='Buy $'+h.p;b.onclick=()=>{if(r.cash<h.p){b.textContent='Need $'+(h.p-r.cash)+' more';return;}r.cash-=h.p;r.hats.push(h.id);r.hat=h.id;saveRec(G.ini,r);renderShop();};}
+    row.appendChild(b);hEl.appendChild(row);});
+}
+$('shopBack').onclick=()=>{if(G.from==='s-home')homeInfo();screen(G.from);};
+
+/* ================= Force puzzles ================= */
+const fx=(d,n)=>({d,n}),FREE=d=>({d,n:'free'}),FRIC=d=>({d,n:'fric'});
+const HBW=w=>ex=>Object.assign({Fg:fx('D',w),FN:fx('U',w)},ex);
+const H20=HBW(20),H30=HBW(30),H40=HBW(40);
+const LEVELS=[
+{id:1,title:'Hanging treat',axis:'y',m:2,cash:3,scene:{obj:'treat',ymax:4,rope:true,floor:'bowl'},y0:3,
+ brief:"Murphy's treat weighs 20 N and hangs from a rope above his bowl.",
+ stages:[
+  {label:'Before the cut',cut:true,prompt:'Build the diagram for the hanging treat.',forces:{Fg:fx('D',20),FT:fx('U',20)},why:'The treat hangs still, so the rope pulls up exactly as hard as gravity pulls down.'},
+  {label:'After the cut',prompt:'Predict: build the diagram for the treat right after the cut.',forces:{Fg:fx('D',20)},run:{until:'floor',max:4},why:'The rope is gone, so tension is 0. Only gravity acts.'}],
+ goal:()=>({ok:true,msg:'Plop! Only gravity acted, so the treat accelerated downward the whole way.'})},
+{id:2,title:'Platform and rope',axis:'y',m:2,cash:3,scene:{obj:'treat',ymax:4,rope:true,floor:'platform'},y0:0,
+ brief:'The treat weighs 20 N. It sits on a platform, and a rope also pulls up on it with 10 N.',
+ stages:[
+  {label:'Before the cut',cut:true,prompt:'Build the diagram. Two forces hold the treat up.',forces:{Fg:fx('D',20),FT:fx('U',10),FN:fx('U',10)},why:'The rope holds up 10 N, so the platform only has to push up with the other 10 N.'},
+  {label:'After the cut',prompt:'Predict: build the diagram right after the cut.',forces:{Fg:fx('D',20),FN:fx('U',20)},run:{dur:2},why:'With the rope gone, the platform pushes up with all 20 N.'}],
+ goal:()=>({ok:true,msg:'The treat stays put! The normal force grew to 20 N, so the forces still balance and there is no acceleration.'})},
+{id:3,title:'Sled dash',axis:'x',m:3,cash:3,scene:{obj:'sled',xmax:50,goalX:50,floor:'snow'},
+ brief:"Mr. Ward is pulling Murphy's sled with a rope. The sled weighs 30 N. Snow friction is 10 N. Get the sled to the flag in 5 seconds.",
+ stages:[{label:'Launch',prompt:'Build the forces. Choose how hard Mr. Ward pulls on the rope.',forces:H30({FT:FREE('R'),Ffr:FRIC('L')}),fric:10,run:{dur:5,endAtX:50}}],
+ sol:[{FT:3}],
+ goal:s=>s.x>=49.9?{ok:true,msg:'It reached the flag! A bigger net force gave a bigger acceleration.'}:{ok:false,msg:s.lastNet<=0?'The sled never sped up. The pull has to be bigger than friction.':'Time ran out at '+s.x.toFixed(0)+' m. The flag is at 50 m. A bigger net force gives a bigger acceleration.'}},
+{id:4,title:'Cut the tow rope',axis:'x',m:3,cash:3,v0:4,scene:{obj:'sled',xmax:12,floor:'carpet',tow:true},
+ brief:"Mr. Ward tows the sled at a steady 4 m/s over carpet. Carpet friction is 10 N. The sled weighs 30 N.",
+ stages:[
+  {label:'Before the cut',cut:true,prompt:'Build the diagram while the sled moves at a steady speed.',forces:H30({FT:fx('R',10),Ffr:fx('L',10)}),fric:10,why:'Steady speed means balanced forces: the pull equals friction.'},
+  {label:'After the cut',prompt:'Predict: build the diagram right after the cut. The sled is still moving right.',forces:H30({Ffr:fx('L',10)}),fric:10,run:{until:'stop',max:6},why:'Only friction acts sideways now.'}],
+ goal:()=>({ok:true,msg:'The sled slowed to a stop. Friction was the only horizontal force, so it caused a negative acceleration.'})},
+{id:5,title:'Spring cart',axis:'x',m:3,cash:3,scene:{obj:'cart',xmax:12,floor:'carpet',spring:true},
+ brief:'A compressed spring pushes the cart right with 20 N, but a rope holds it. The cart weighs 30 N. Carpet friction is 10 N.',
+ stages:[
+  {label:'Before the cut',cut:true,prompt:'Build the diagram while the rope holds the cart still.',forces:H30({Fsp:fx('R',20),FT:fx('L',20)}),why:'The spring pushes right and the rope pulls left with the same force: balanced, so nothing moves. Nothing is trying to slide it yet, so friction has nothing to oppose.'},
+  {label:'Spring pushing',prompt:'Predict: the rope is cut and the spring pushes the cart for 1 second. Build the diagram.',forces:H30({Fsp:fx('R',20),Ffr:fx('L',10)}),fric:10,run:{dur:1},why:'The spring beats friction, so the cart accelerates right.'},
+  {label:'After the spring',prompt:'Predict: the cart has left the spring. Build the diagram.',forces:H30({Ffr:fx('L',10)}),fric:10,run:{until:'stop',max:6},why:'The spring no longer touches the cart. Only friction acts horizontally, so it slows down.'}],
+ goal:()=>({ok:true,msg:'The spring gave the cart a speed, then friction took it away.'})},
+{id:6,title:'Rough floor',axis:'x',m:4,cash:3,scene:{obj:'crate',xmax:40,goalX:30,floor:'rough'},
+ brief:'The crate weighs 40 N. The rough floor has 20 N of friction. Get the crate to the flag in 6 seconds.',
+ stages:[{label:'Push',prompt:'Build the forces. Choose how hard to push.',forces:H40({Fapp:FREE('R'),Ffr:FRIC('L')}),fric:20,run:{dur:6,endAtX:30}}],
+ sol:[{Fapp:3}],
+ goal:s=>s.x>=29.9?{ok:true,msg:'Made it! Only the push beyond 20 N of friction made the crate accelerate.'}:{ok:false,msg:s.lastNet<=0?'The crate did not move. A push of 20 N or less cannot beat 20 N of friction.':'Time ran out at '+s.x.toFixed(0)+' m. A bigger net force gives a bigger acceleration.'}},
+{id:7,title:'Bucket lift',axis:'y',m:3,cash:3,scene:{obj:'bucket',ymax:8,rope:true,floor:'floor',shelf:6},y0:0,
+ brief:'The bucket weighs 30 N and rests on the floor. Lift it to the 6 m shelf within 3 seconds.',
+ stages:[{label:'Lift',prompt:'Build the forces. Choose how hard the rope pulls up. The floor pushes with whatever the rope does not hold up.',forces:{Fg:fx('D',30),FT:FREE('U'),FN:{d:'U',n:'adjust'}},run:{dur:3,endAtY:6},no:{}}],
+ sol:[{FT:4}],
+ goal:s=>s.y>=5.95?{ok:true,msg:'On the shelf! The rope had to pull with more than 30 N to make a net force upward.'}:{ok:false,msg:s.lastNet<=0?'The bucket never left the floor. A pull of 30 N or less cannot beat gravity.':'Too slow: only '+s.y.toFixed(1)+' m high.'}},
+{id:8,title:'Cruise and stop',axis:'x',m:3,cash:6,scene:{obj:'cart',xmax:34,zone:[29,31],floor:'carpet'},
+ brief:'The cart weighs 30 N. Carpet friction is 10 N. Speed up for 2 seconds, cruise at that speed for 3 seconds, then Mr. Ward pulls back on a rope to stop the cart in the green zone.',
+ stages:[
+  {label:'Speed up',prompt:'Build the forces for the first 2 seconds.',forces:H30({Fapp:FREE('R'),Ffr:FRIC('L')}),fric:10,run:{dur:2}},
+  {label:'Cruise',prompt:'Build the forces to keep the speed steady for 3 seconds.',forces:H30({Fapp:FREE('R'),Ffr:FRIC('L')}),fric:10,run:{dur:3}},
+  {label:'Stop',prompt:'Mr. Ward pulls back on a rope (to the left) to stop the cart in the green zone. Choose how hard he pulls.',forces:H30({FT:FREE('L'),Ffr:FRIC('L')}),fric:10,run:{until:'stop',max:6}}],
+ sol:[{Fapp:2},{Fapp:1},{FT:1}],
+ goal:s=>{const a=s.snaps[0]||{v:0},b=s.snaps[1]||{v:0};
+  if(a.v<5)return{ok:false,msg:'The cart barely sped up in the first phase. You need a push bigger than friction.'};
+  if(Math.abs(b.v-a.v)>0.8)return{ok:false,msg:b.v>a.v?'You were still speeding up in the cruise phase. To cruise, the push must equal friction.':'You slowed down in the cruise phase. To cruise, the push must equal friction.'};
+  if(s.stopped&&s.x>=29&&s.x<=31)return{ok:true,msg:'Perfect! Cruising needs a push equal to friction, and the pull back gave a negative acceleration that stopped the cart in the zone.'};
+  return{ok:false,msg:s.x>31?'It stopped at '+s.x.toFixed(1)+' m, past the zone. A bigger pull back stops it sooner.':'It stopped at '+s.x.toFixed(1)+' m, short of the zone. That pull stopped it too soon.'};}},
+{id:9,title:'Brake!',axis:'x',m:2,cash:6,v0:6,scene:{obj:'crate',xmax:8,zone:[1.4,2.4],floor:'carpet'},
+ brief:'The crate weighs 20 N and slides right at 6 m/s. Carpet friction is 10 N. A student pushes back to stop it in the green zone.',
+ stages:[{label:'Brake',prompt:'Build the forces. Choose how hard to push back (left).',forces:H20({Fapp:FREE('L'),Ffr:FRIC('L')}),fric:10,run:{until:'stop',max:5}}],
+ sol:[{Fapp:1}],
+ goal:s=>(s.stopped&&s.x>=1.4&&s.x<=2.4)?{ok:true,msg:'Stopped in the zone! A bigger force opposite the motion means a bigger negative acceleration and a shorter stop.'}:{ok:false,msg:s.x>2.4?'It slid to '+s.x.toFixed(1)+' m, past the zone. Push back harder for a bigger acceleration.':'It stopped at '+s.x.toFixed(1)+' m, short of the zone. That much force stops it too quickly.'}},
+{id:10,title:'Stop at the dock',axis:'x',m:3,cash:6,scene:{obj:'cart',xmax:16,zone:[12.5,14.5],floor:'carpet'},
+ brief:'The cart weighs 30 N. Carpet friction is 10 N. Speed up for 2 seconds, then stop with the front of the cart in the green dock.',
+ stages:[
+  {label:'Speed up',prompt:'Build the forces for the first 2 seconds.',forces:H30({Fapp:FREE('R'),Ffr:FRIC('L')}),fric:10,run:{dur:2}},
+  {label:'Slow down',prompt:'Build the forces for the rest of the trip. You may push back (left), or not at all.',forces:H30({Fapp:FREE('L'),Ffr:FRIC('L')}),fric:10,run:{until:'stop',max:8}}],
+ sol:[{Fapp:2},{Fapp:0}],
+ goal:s=>(s.stopped&&s.x>=12.5&&s.x<=14.5)?{ok:true,msg:'Perfect docking! Friction alone slowed the cart: no push needed.'}:{ok:false,msg:s.x>14.5?'It stopped at '+s.x.toFixed(1)+' m, past the dock. Try less speed or more braking.':'It stopped at '+s.x.toFixed(1)+' m, short of the dock.'}},
+{id:11,title:'Spring cart on ice',axis:'x',m:3,cash:6,scene:{obj:'cart',xmax:28,zone:[22,25],floor:'ice',spring:true},
+ brief:'The same spring cart, now on ice with no friction. The spring pushes with 20 N for 1 second, then the cart leaves it. The cart weighs 30 N.',
+ stages:[
+  {label:'Before the cut',cut:true,prompt:'Build the diagram while the rope holds the cart still.',forces:H30({Fsp:fx('R',20),FT:fx('L',20)}),why:'Balanced forces, so the cart stays at rest.'},
+  {label:'Spring pushing',prompt:'Predict: the rope is cut and the spring pushes for 1 second. Build the diagram.',forces:H30({Fsp:fx('R',20)}),run:{dur:1},why:'There is no friction on ice, so the spring is the only horizontal force.'},
+  {label:'After the spring',prompt:'Predict: the cart has left the spring. Build the diagram for the next 3 seconds.',forces:H30({}),run:{dur:3},why:'No horizontal force at all. So the velocity stays the same.'}],
+ goal:()=>({ok:true,msg:'It coasted all the way to the bell at constant velocity. No force means no acceleration.'})},
+{id:12,title:'Ice then carpet',axis:'x',m:3,cash:6,scene:{obj:'cart',xmax:40,zone:[32,35],zones:[{x0:0,x1:6.7,t:'carpet'},{x0:6.7,x1:26.7,t:'ice'},{x0:26.7,x1:40,t:'carpet'}]},
+ brief:'The cart weighs 30 N. The track has carpet (10 N of friction), then ice (no friction), then carpet again. Stop in the green zone.',
+ stages:[
+  {label:'Carpet',prompt:'Build the forces for 2 seconds on carpet.',forces:H30({Fapp:FREE('R'),Ffr:FRIC('L')}),fric:10,run:{dur:2}},
+  {label:'Ice',prompt:'Build the forces for 3 seconds on ice.',forces:H30({Fapp:FREE('R')}),run:{dur:3},no:{Ffr:'Ice has no friction.'}},
+  {label:'Carpet again',prompt:'Build the forces until the cart stops. Does the cart need a push?',forces:H30({Fapp:FREE('R'),Ffr:FRIC('L')}),fric:10,run:{until:'stop',max:8}}],
+ sol:[{Fapp:2},{Fapp:0},{Fapp:0}],
+ goal:s=>(s.stopped&&s.x>=32&&s.x<=35)?{ok:true,msg:'Nailed it! No friction on the ice meant the speed stayed constant, and on the carpet friction alone slowed the cart to a stop.'}:{ok:false,msg:!s.stopped?'The cart never stopped. A push forward fights friction, so it keeps going.':s.x>35?'It stopped at '+s.x.toFixed(1)+' m, past the zone.':'It stopped at '+s.x.toFixed(1)+' m, short of the zone.'}},
+{id:13,title:'Elevator ride',axis:'y',m:3,cash:6,scene:{obj:'elevator',ymax:16,rope:true,floor:'none',target:[12,14.5],targetLabel:'13 m floor'},y0:0,
+ brief:'The elevator weighs 30 N and hangs from a cable. You have 2 seconds per stage. End at rest at the 13 m floor.',
+ stages:[
+  {label:'First 2 seconds',prompt:'Build the forces for the first 2 seconds.',forces:{Fg:fx('D',30),FT:FREE('U')},run:{dur:2},no:{FN:'The elevator hangs in the air. Nothing pushes up from below.'}},
+  {label:'Next 2 seconds',prompt:'Build the forces for the next 2 seconds.',forces:{Fg:fx('D',30),FT:FREE('U')},run:{dur:2},no:{FN:'The elevator hangs in the air. Nothing pushes up from below.'}},
+  {label:'Last 2 seconds',prompt:'Build the forces for the last 2 seconds.',forces:{Fg:fx('D',30),FT:FREE('U')},run:{dur:2},no:{FN:'The elevator hangs in the air. Nothing pushes up from below.'}}],
+ sol:[{FT:4},{FT:2},{FT:3}],
+ goal:s=>(s.y>=12&&s.y<=14.5&&Math.abs(s.v)<0.3)?{ok:true,msg:'Perfect stop! Balanced forces only hold it still once its velocity is 0.'}:{ok:false,msg:Math.abs(s.v)>=0.3?'It was still moving at '+s.v.toFixed(1)+' m/s. Balanced forces keep the velocity constant, they do not stop it.':'It ended at '+s.y.toFixed(1)+' m, not the 13 m floor.'}},
+{id:14,title:'Dock with the station',axis:'x',m:5,cash:6,scene:{obj:'rocket',xmax:50,zone:[40,44],space:true},
+ brief:'A 5 kg rocket in deep space. There is no gravity and no friction here. Speed up, coast, then use the engine to stop at the station.',
+ stages:[
+  {label:'Burn',prompt:'Build the forces for 3 seconds. The engine pushes right.',forces:{Fapp:FREE('R')},run:{dur:3},no:{Fg:'No planet is nearby, so no gravity here.',FN:'Nothing touches the rocket, so no normal force.',Ffr:'There is no friction in space.'}},
+  {label:'Coast',prompt:'Build the forces for 4 seconds. Leave the diagram empty if no force acts.',forces:{Fapp:FREE('R')},run:{dur:4},no:{Fg:'No planet is nearby, so no gravity here.',FN:'Nothing touches the rocket, so no normal force.',Ffr:'There is no friction in space.'}},
+  {label:'Brake burn',prompt:'The rocket has turned around. Build the forces until it stops (engine pushes left).',forces:{Fapp:FREE('L')},run:{until:'stop',max:8},no:{Fg:'No planet is nearby, so no gravity here.',FN:'Nothing touches the rocket, so no normal force.',Ffr:'There is no friction in space.'}}],
+ sol:[{Fapp:1},{Fapp:0},{Fapp:1}],
+ goal:s=>(s.stopped&&s.x>=40&&s.x<=44)?{ok:true,msg:'Docked! With no friction, the rocket coasted without any force, and the brake burn slowed it down.'}:{ok:false,msg:s.x>44?'It stopped at '+s.x.toFixed(1)+' m, past the station.':'It stopped at '+s.x.toFixed(1)+' m, short of the station (40 to 44 m).'}},
+{id:15,title:'Soft landing',axis:'y',m:3,cash:6,scene:{obj:'crateV',ymax:9,rope:true,floor:'pad'},y0:7.5,
+ brief:'The crate weighs 30 N and hangs 7.5 m up on a rope. Lower it to the pad with a landing speed of 1 m/s or less. You have 1.5 seconds per stage.',
+ stages:[
+  {label:'Lower',prompt:'Build the forces for the first 1.5 seconds.',forces:{Fg:fx('D',30),FT:FREE('U')},run:{dur:1.5,landEnds:true},no:{FN:'The crate hangs in the air. Nothing pushes up from below.'}},
+  {label:'Brake',prompt:'Build the forces for the next 1.5 seconds.',forces:{Fg:fx('D',30),FT:FREE('U')},run:{dur:1.5,landEnds:true},no:{FN:'The crate hangs in the air. Nothing pushes up from below.'}}],
+ sol:[{FT:2},{FT:4}],
+ goal:s=>(s.landed&&Math.abs(s.impact)>1)?{ok:false,msg:'Crash! You hit the pad at '+Math.abs(s.impact).toFixed(1)+' m/s. Slow down before landing.'}:(((s.y<=0.4&&Math.abs(s.v)<=1)||s.landed)?{ok:true,msg:'Feather-soft! You sped the crate down, then pulled harder than its weight to slow it before the pad.'}:{ok:false,msg:'The crate is still in the air at '+s.y.toFixed(1)+' m, moving '+s.v.toFixed(1)+' m/s.'})}
+];
+const pzRefStep=id=>({1:5,2:2,5:2,6:2})[id]!=null?({1:5,2:2,5:2,6:2})[id]:3;
+const PZN={Fg:'Gravity',FN:'Normal',FT:'Tension',Ffr:'Friction',Fapp:'Applied',Fsp:'Spring'};
+const PZ={snaps:[],li:0,si:0,S:{},x:0,y:0,v:0,cut:false,phase:'menu',fails:0,wrong:0,att:0,log:[],raf:0,lastNet:0};
+const curL=()=>LEVELS[PZ.li], curS=()=>curL().stages[PZ.si];
+const pzStarsOf=r=>(r.pz&&r.pz.stars)||{};
+const pzTotal=r=>Object.values(pzStarsOf(r)).reduce((a,b)=>a+b,0);
+
+/* ---- menu ---- */
+function openPZMenu(){
+  const r=rec(G.ini),st=pzStarsOf(r);
+  $('pzWho').textContent=G.ini+' · '+pzTotal(r)+' of 45 stars'+(CASH_ON?' · Class Cash '+r.cash:'');
+  const g=$('pzGrid');g.innerHTML='';
+  LEVELS.forEach((lv,i)=>{
+    const unlocked=i===0||(st[LEVELS[i-1].id]||0)>=1;const stars=st[lv.id]||0;
+    const b=document.createElement('button');b.className='pzlv'+(unlocked?'':' lock');b.disabled=!unlocked;
+    b.innerHTML='<span class="n">'+lv.id+'</span><span class="t">'+lv.title+'</span><span class="s">'+(unlocked?'★'.repeat(stars)+'☆'.repeat(3-stars):'locked')+'</span>';
+    b.onclick=()=>startLevel(i);g.appendChild(b);
+  });
+  screen('s-pzmenu');
+}
+/* ---- level flow ---- */
+function startLevel(i){
+  cancelAnimationFrame(PZ.raf);
+  PZ.li=i;PZ.fails=0;PZ.wrong=0;resetLevelState();screen('s-pz');
+}
+function resetLevelState(){
+  const lv=curL();PZ.snaps=[];PZ.si=0;PZ.cut=false;PZ.x=lv.x0||0;PZ.y=lv.y0||0;PZ.v=lv.v0||0;PZ.log=[];PZ.lastNet=0;
+  $('pzEnd').style.display='none';loadStage();
+}
+function loadStage(){
+  const lv=curL(),st=curS();PZ.S={};ORDER.forEach(k=>PZ.S[k]=0);PZ.att=0;PZ.phase='build';
+  $('pzHud').textContent='Level '+lv.id+': '+lv.title+(lv.stages.length>1?'  ·  Stage '+(PZ.si+1)+' of '+lv.stages.length:'');
+  $('pzBrief').textContent=lv.brief;
+  $('pzStageTag').textContent=st.label;
+  $('pzPrompt').textContent=st.prompt;
+  $('pzFb').style.display='none';$('pzCheck').style.display='block';$('pzGo').style.display='none';$('pzCut').style.display='none';
+  $('pzTray').style.display='grid';$('pzPrompt').style.display='block';
+  renderLog();pzStats(0,0);pzChips();pzDraw();
+}
+function renderLog(){const l=$('pzLog');if(!PZ.log.length){l.style.display='none';return;}l.style.display='block';l.innerHTML='<b>What happened</b><br>'+PZ.log.join('<br>');}
+function pzStats(net,a){$('pzNet').textContent=(net>0?'+':'')+Math.round(net)+' N';$('pzAcc').textContent=(a>0?'+':'')+a.toFixed(1)+' m/s²';$('pzVel').textContent=(PZ.v>0?'+':'')+PZ.v.toFixed(1)+' m/s';}
+function pzChips(){
+  const t=$('pzTray');t.innerHTML='';
+  ORDER.forEach(k=>{const n=PZ.S[k]*10;const b=document.createElement('button');b.className='chip'+(n?' on':'');b.style.borderColor=n?FC[k]:'';
+    b.innerHTML='<span><span class="dot" style="background:'+FC[k]+'"></span>'+PZN[k]+'</span><span class="st">'+(n?n+' N':'off')+'</span>';
+    b.onclick=()=>{if(PZ.phase!=='build')return;PZ.S[k]=(PZ.S[k]+1)%6;$('pzFb').style.display='none';pzChips();pzDraw();};t.appendChild(b);});
+}
+function pzFb(kind,html){const f=$('pzFb');f.className='fb '+kind;f.innerHTML=html;f.style.display='block';}
+function expectedN(st,k){
+  const spec=st.forces[k];if(!spec)return null;
+  if(typeof spec.n==='number')return spec.n;
+  if(spec.n==='adjust')return Math.max(0,curL().m*10-PZ.S.FT*10);
+  if(spec.n==='fric'){
+    const moving=Math.abs(PZ.v)>0.01;let net=0;
+    ['FT','Fapp','Fsp'].forEach(q=>{if(st.forces[q])net+=(st.forces[q].d==='R'?1:-1)*PZ.S[q]*10;});
+    return moving?st.fric:Math.min(Math.abs(net),st.fric);
+  }
+  return null;
+}
+const HINT={Fg:'Gravity equals the weight given in the story.',FN:'The surface supports the object. How hard must it push?',FT:'How hard does the rope pull?',Ffr:'Friction is given in the story. Remember: it can never be bigger than the push when the object is not moving yet.',Fapp:'How hard is the push?',Fsp:'The spring force is given in the story.'};
+function pzCheckDiagram(){
+  if(PZ.phase!=='build')return;
+  const lv=curL(),st=curS(),have=ORDER.filter(k=>PZ.S[k]>0);
+  if(!have.length&&!Object.values(st.forces).every(sp=>sp.n==='free')){pzFb('info','Add at least one force first.');return;}
+  let msg='',exact='';
+  const extra=have.filter(k=>!st.forces[k]);
+  if(extra.length){const k=extra[0];msg=(st.no&&st.no[k])||(PZN[k]+" doesn't belong in this diagram. What would be exerting it?");}
+  if(!msg){
+    for(const k of Object.keys(st.forces)){
+      const e=expectedN(st,k);if(e===null)continue;const a=PZ.S[k]*10;
+      if(a!==e){
+        if(k==='Ffr'&&e===0)msg="Nothing is pushing or pulling it sideways yet, so friction has nothing to oppose. Friction can't be bigger than the push while the object is at rest.";
+        else if(a===0)msg='A force is missing. '+HINT[k];
+        else msg=PZN[k]+' is not the right size. '+HINT[k];
+        exact=PZN[k]+' should be '+e+' N.';break;
+      }
+    }
+  }
+  if(msg){PZ.wrong++;PZ.att++;pzFb('no',msg+(PZ.att>=2&&exact?'<br><b>'+exact+'</b>':'')+'<br><span style="font-size:13px">Adjust and check again.</span>'+(PZ.att>=2?'<br><button class="btn sm" id="pzRef2" style="margin-top:8px">Need a refresher?</button>':''));const rb=$('pzRef2');if(rb)rb.onclick=()=>openLesson(pzRefStep(lv.id),'s-pz');sBad();return;}
+  PZ.phase='ready';sGood();$('pzCheck').style.display='none';
+  pzFb('ok','Correct! '+(st.why||''));
+  if(st.cut)$('pzCut').style.display='block';else $('pzGo').style.display='block';
+}
+$('pzCheck').onclick=pzCheckDiagram;
+$('pzCut').onclick=()=>{
+  if(PZ.phase!=='ready')return;PZ.cut=true;sShutter();PZ.log.push('Snip! The rope is cut.');$('pzCut').style.display='none';PZ.si++;loadStage();
+  pzFb('info','The rope is cut. What forces act on it now?');
+};
+$('pzGo').onclick=()=>pzRun();
+$('pzBack').onclick=()=>{cancelAnimationFrame(PZ.raf);openPZMenu();};
+
+/* ---- simulation ---- */
+function pzRun(){
+  if(PZ.phase!=='ready')return;
+  const lv=curL(),st=curS(),run=st.run||{},m=lv.m,S=PZ.S;
+  PZ.phase='run';$('pzGo').style.display='none';$('pzTray').style.display='none';$('pzPrompt').style.display='none';$('pzFb').style.display='none';
+  const dirOf=k=>(st.forces[k]?st.forces[k].d:DEFD[k]);
+  let other=0;
+  if(lv.axis==='x'){['FT','Fapp','Fsp'].forEach(k=>{if(S[k])other+=(dirOf(k)==='R'?1:-1)*S[k]*10;});}
+  else{['Fg','FT','FN','Fapp'].forEach(k=>{if(S[k])other+=(dirOf(k)==='U'?1:-1)*S[k]*10;});}
+  const f=st.fric||0;const v0=PZ.v;let t=0,stopped=false,landed=false,impact=0,netShown=0,aShown=0,firstNet=null;
+  let last=performance.now();
+  function phys(dt){
+    let net=other;
+    if(lv.axis==='x'&&f>0){
+      if(PZ.v!==0)net-=Math.sign(PZ.v)*f;
+      else if(Math.abs(net)<=f)net=0;else net-=Math.sign(net)*f;
+    }
+    const a=net/m,before=PZ.v;PZ.v+=a*dt;
+    if(lv.axis==='x'){
+      if(run.until==='stop'&&before>0&&PZ.v<=0.02){PZ.v=0;stopped=true;}
+      else if(f>0&&before!==0&&Math.sign(PZ.v)!==Math.sign(before)&&Math.abs(other)<=f){PZ.v=0;}
+      PZ.x+=PZ.v*dt;
+    }else{
+      PZ.y+=PZ.v*dt;
+      if(PZ.y<=0&&PZ.v<0){impact=PZ.v;PZ.y=0;PZ.v=0;landed=true;}
+    }
+    netShown=net;aShown=a;if(firstNet===null)firstNet=net;PZ.lastNet=net;
+  }
+  function frame(now){
+    const dt=Math.min(0.03,(now-last)/1000);last=now;t+=dt;phys(dt);pzStats(netShown,aShown);pzDraw(true);
+    let end=false;
+    if(run.dur&&t>=run.dur)end=true;
+    if(run.until==='stop'&&(stopped||t>=(run.max||8)))end=true;
+    if(run.until==='floor'&&(landed||t>=(run.max||5)))end=true;
+    if(run.endAtX&&PZ.x>=run.endAtX)end=true;
+    if(run.endAtY&&PZ.y>=run.endAtY)end=true;
+    if(run.landEnds&&landed)end=true;
+    if(landed&&lv.axis==='y'&&run.until!=='floor')end=true;
+    if(end){
+      const nn=firstNet===null?0:firstNet;
+      const vEnd=landed?impact:PZ.v,dirw=q=>lv.axis==='y'&&Math.abs(q)>0.05?(q<0?' downward':' upward'):'',fmtV=q=>(lv.axis==='y'?Math.abs(q):q).toFixed(1)+' m/s'+dirw(q);
+      PZ.log.push((st.label||'Stage')+': net force '+(nn>0?'+':'')+Math.round(nn)+' N gave acceleration '+((nn/m)>0?'+':'')+(nn/m).toFixed(1)+' m/s². '+(Math.abs(vEnd-v0)<0.05?'Velocity stayed '+fmtV(v0)+'.':'Velocity went from '+fmtV(v0)+' to '+fmtV(vEnd)+(landed?' just before landing':'')+'.'));
+      pzStageDone({x:PZ.x,y:PZ.y,v:PZ.v,stopped:stopped||(run.until==='stop'&&Math.abs(PZ.v)<0.05),landed,impact,lastNet:nn,t});return;
+    }
+    PZ.raf=requestAnimationFrame(frame);
+  }
+  PZ.raf=requestAnimationFrame(frame);
+}
+function pzStageDone(state){
+  const lv=curL();PZ.snaps.push({x:state.x,y:state.y,v:state.v});state.snaps=PZ.snaps;renderLog();
+  if(PZ.si<lv.stages.length-1&&!(state.landed&&lv.axis==='y')){PZ.si++;loadStage();return;}
+  const res=lv.goal(state);PZ.phase='done';
+  if(res.ok)return levelWin(res.msg);
+  PZ.fails++;sBad();
+  $('pzEnd').style.display='block';
+  $('pzEnd').innerHTML='<div class="fb no"><b>Not quite.</b> '+res.msg+'</div><button class="btn pri" id="pzRetry">Try the level again</button><button class="btn" id="pzRefresh">Need a refresher? Open the lesson</button><button class="btn" id="pzMenuBtn">Level menu</button>';
+  $('pzRetry').onclick=()=>resetLevelState();$('pzRefresh').onclick=()=>openLesson(pzRefStep(lv.id),'s-pz');$('pzMenuBtn').onclick=openPZMenu;
+  $('pzTray').style.display='none';$('pzCheck').style.display='none';
+}
+function levelWin(msg){
+  const lv=curL(),pen=PZ.fails*2+PZ.wrong,stars=pen<=2?3:pen<=5?2:1;
+  const r=rec(G.ini);r.pz=r.pz||{stars:{}};r.pz.stars=r.pz.stars||{};
+  const old=r.pz.stars[lv.id]||0;let earn=0;
+  if(stars>old){r.pz.stars[lv.id]=stars;const t=today();if(r.day!==t){r.day=t;r.today=0;}
+    const want=Math.round(lv.cash*stars/3)-Math.round(lv.cash*old/3);earn=CASH_ON?Math.max(0,Math.min(want,60-r.today)):0;r.cash+=earn;r.today+=earn;}
+  saveRec(G.ini,r);
+  if(LB_ON&&stars>old&&fbReady){db.ref(GAME_ID+'/puzzles/'+fbKey(G.ini)).set({initials:G.ini,stars:pzTotal(r),ts:Date.now()}).catch(()=>{});}
+  sGood();pzStats(0,0);
+  const next=PZ.li<LEVELS.length-1;
+  $('pzTray').style.display='none';$('pzCheck').style.display='none';
+  const e=$('pzEnd');e.style.display='block';
+  e.innerHTML='<div class="fb ok"><b>Level complete! '+'★'.repeat(stars)+'☆'.repeat(3-stars)+'</b><br>'+msg+(earn>0?'<br>💰 +'+earn+' Class Cash':(stars>old?'':'<br><span style="font-size:13px">No new stars this time.</span>'))+'</div>'+(next?'<button class="btn pri" id="pzNext">Next level</button>':'')+'<button class="btn" id="pzAgain">Replay for more stars</button><button class="btn" id="pzMenuBtn">Level menu</button>';
+  if(next)$('pzNext').onclick=()=>startLevel(PZ.li+1);
+  $('pzAgain').onclick=()=>startLevel(PZ.li);$('pzMenuBtn').onclick=openPZMenu;
+  PZ.phase='won';
+}
+
+/* ---- drawing ---- */
+function pzPerson(x,y,dir){return robFig(x,y,dir,0.9);}
+function pzObject(kind,cx,cy){
+  const o={
+   sled:'<rect x="-30" y="8" width="60" height="7" rx="3" fill="#B07A45"/><path d="M-34 15 Q-38 19 -28 19" fill="none" stroke="#B07A45" stroke-width="3"/>'+headG(IMG.snow,-2,-34,50),
+   crate:headG(IMG.puppy,0,-26,19)+'<rect x="-18" y="-16" width="36" height="32" fill="#B07A45" stroke="#6B4528" stroke-width="2"/><line x1="-18" y1="-16" x2="18" y2="16" stroke="#6B4528"/><line x1="18" y1="-16" x2="-18" y2="16" stroke="#6B4528"/>',
+   cart:headG(IMG.under,0,-28,19)+'<rect x="-26" y="-12" width="52" height="20" rx="3" fill="#7A4BD1" stroke="#3D2A7A" stroke-width="2"/><circle cx="-14" cy="12" r="6" fill="#14213D"/><circle cx="14" cy="12" r="6" fill="#14213D"/>',
+   rocket:'<path d="M-26 -10 L16 -10 Q34 -8 40 0 Q34 8 16 10 L-26 10Z" fill="#EAF0FF" stroke="#5B6784"/><path d="M16 -10 Q34 -8 40 0 Q34 8 16 10Z" fill="#E6007E"/><path d="M-20 -10 L-30 -22 L-8 -10Z M-20 10 L-30 22 L-8 10Z" fill="#4FD1C5"/>'+headG(IMG.eyes,-2,0,12),
+   treat:'<circle r="14" fill="#EF9F27" stroke="#633806" stroke-width="2"/><path d="M-8 -3 q8 -8 16 0" fill="none" stroke="#633806" stroke-width="2"/>',
+   bucket:'<path d="M-18 -14 h36 l-5 28 h-26Z" fill="#1D9E75" stroke="#0F6E56" stroke-width="2"/><path d="M-14 -14 Q0 -30 14 -14" fill="none" stroke="#0F6E56" stroke-width="3"/>',
+   crateV:'<rect x="-24" y="-24" width="48" height="48" fill="#B07A45" stroke="#6B4528" stroke-width="2"/>'+headG(IMG.puppy,0,0,20),
+   elevator:'<rect x="-24" y="-24" width="48" height="48" rx="3" fill="#D3D1C7" stroke="#5F5E5A" stroke-width="2"/>'+headG(IMG.eyes,0,0,22)
+  };
+  return '<g transform="translate('+cx+','+cy+')">'+(o[kind]||'')+'</g>';
+}
+const SURF={carpet:'#9BD9BE',ice:'#CFEAF7',snow:'#F2F6FF',rough:'#C9A47A',floor:'#D3D1C7'};
+const PZEXT={sled:{l:30,r:30,u:86,d:19},crate:{l:18,r:18,u:46,d:16},crateV:{l:24,r:24,u:24,d:24},cart:{l:26,r:26,u:48,d:18},rocket:{l:40,r:40,u:12,d:12},treat:{l:14,r:14,u:14,d:14},bucket:{l:18,r:18,u:14,d:14},elevator:{l:24,r:24,u:24,d:24}};
+function pzArrows(cx,cy,st,ext){
+  ext=ext||{l:15,r:15,u:15,d:15};
+  const arr=ORDER.filter(k=>PZ.S[k]>0).map(k=>({k,d:(st.forces[k]?st.forces[k].d:DEFD[k]),n:PZ.S[k]*10}));
+  const grp={};arr.forEach((a,i)=>{(grp[a.d]=grp[a.d]||[]).push(i);});const off={};Object.values(grp).forEach(ix=>ix.forEach((i,j)=>{off[i]=(j-(ix.length-1)/2)*20;}));
+  let s='<defs>'+ORDER.map(k=>'<marker id="zm'+k+'" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M1 1L9 5L1 9Z" fill="'+FC[k]+'"/></marker>').join('')+'</defs>';
+  arr.forEach((a,i)=>{
+    const v=VEC[a.d],L=Math.min(a.n*0.95,50),o=off[i]||0,ox=v[0]?0:o,oy=v[1]?0:o;
+    const e=v[0]>0?ext.r:v[0]<0?ext.l:v[1]<0?ext.u:ext.d,sx0=cx+ox,sy0=cy+oy,x1=sx0+v[0]*e,y1=sy0+v[1]*e,x2=x1+v[0]*L,y2=y1+v[1]*L;
+    s+='<line x1="'+sx0+'" y1="'+sy0+'" x2="'+x1+'" y2="'+y1+'" stroke="'+(lv_space()?'#EAF0FF':'#14213D')+'" stroke-opacity=".55" stroke-width="2"/>';
+    s+='<line x1="'+x1+'" y1="'+y1+'" x2="'+x2+'" y2="'+y2+'" stroke="'+FC[a.k]+'" stroke-width="5" stroke-linecap="round" marker-end="url(#zm'+a.k+')"/>';
+    let tx=x2,ty=y2,an='middle';const tw=(PZN[a.k].length+6)*6;if(v[0]>0){tx=x2+8;ty=y2+4;an='start';if(tx+tw>336){ty=y2-12;tx=336-tw;}}else if(v[0]<0){tx=x2-8;ty=y2+4;an='end';if(tx-tw<4){ty=y2-12;tx=tw+4;}}else if(v[1]>0){ty=y2+16;}else{ty=y2-8;}
+    s+='<text x="'+tx+'" y="'+ty+'" text-anchor="'+an+'" font-size="11" font-weight="700" fill="'+(lv_space()?'#EAF0FF':'#14213D')+'" stroke="'+(lv_space()?'#0A0F24':'#fff')+'" stroke-width="3" paint-order="stroke" stroke-linejoin="round">'+PZN[a.k]+' '+a.n+' N</text>';
+  });
+  return s+'<circle cx="'+cx+'" cy="'+cy+'" r="3.5" fill="'+(lv_space()?'#EAF0FF':'#14213D')+'"/>';
+}
+const lv_space=()=>!!curL().scene.space;
+function pzDraw(running){
+  const lv=curL(),sc=lv.scene,st=curS()||{forces:{}};
+  const svg=$('pzScene');let s='';
+  if(lv.axis==='x'){
+    svg.setAttribute('viewBox',sc.obj==='sled'?'0 -50 340 288':'0 0 340 238');
+    const X0=96,X1=292,sx=x=>X0+x*(X1-X0)/sc.xmax,gy=148,cy=gy-18;
+    if(sc.space){s+='<rect width="340" height="238" rx="10" fill="#0A0F24"/>';[[20,20],[70,150],[120,40],[190,170],[250,30],[300,120],[330,60],[40,100],[160,90],[220,150],[280,175]].forEach(p=>{s+='<circle cx="'+p[0]+'" cy="'+p[1]+'" r="1.4" fill="#C8D2F0"/>';});}
+    else{(sc.zones||[{x0:0,x1:sc.xmax,t:sc.floor}]).forEach(z=>{s+='<rect x="'+sx(z.x0)+'" y="'+gy+'" width="'+(sx(z.x1)-sx(z.x0))+'" height="16" fill="'+SURF[z.t]+'"/>';if(sc.zones)s+='<text x="'+((sx(z.x0)+sx(z.x1))/2)+'" y="'+(gy+30)+'" text-anchor="middle" font-size="11" fill="#5B6784">'+z.t+'</text>';});
+      s+='<line x1="10" y1="'+gy+'" x2="330" y2="'+gy+'" stroke="#5B6784" stroke-width="2"/>';
+      if(!sc.zones)s+='<text x="170" y="'+(gy+30)+'" text-anchor="middle" font-size="11" fill="#5B6784">'+(sc.floor||'')+'</text>';}
+    if(sc.zone){const a=sx(sc.zone[0]),b=sx(sc.zone[1]);
+      if(sc.space){s+='<rect x="'+a+'" y="'+(cy-40)+'" width="'+(b-a)+'" height="80" fill="rgba(18,135,95,.25)" stroke="#12875F" stroke-dasharray="4 3"/><rect x="'+(a+4)+'" y="'+(cy-14)+'" width="'+(b-a-8)+'" height="28" rx="4" fill="#9AA7D6" stroke="#EAF0FF"/><text x="'+((a+b)/2)+'" y="'+(cy-46)+'" text-anchor="middle" font-size="11" fill="#9BE7C4">station</text>';}
+      else s+='<rect x="'+a+'" y="'+(gy-34)+'" width="'+(b-a)+'" height="34" fill="rgba(18,135,95,.2)" stroke="#12875F" stroke-dasharray="4 3"/><text x="'+((a+b)/2)+'" y="'+(gy-40)+'" text-anchor="middle" font-size="11" fill="#12875F">stop here</text>';}
+    if(sc.goalX!=null){const gx=sx(sc.goalX);s+='<line x1="'+gx+'" y1="'+(gy-56)+'" x2="'+gx+'" y2="'+gy+'" stroke="#5B6784" stroke-width="3"/><path d="M'+gx+' '+(gy-56)+' l24 9 l-24 9Z" fill="#D85A30"/>';}
+    if(sc.spring){s+='<rect x="14" y="'+(cy-30)+'" width="10" height="'+(gy-cy+30)+'" fill="#5B6784"/>';
+      const sw=Math.max(20,Math.min(sx(PZ.x)-30-24,76));
+      {const n=8;let p='M24 '+cy;for(let i=1;i<n;i++){p+=' L'+(24+sw*i/n)+' '+(cy+(i%2?-9:9));}p+=' L'+(24+sw)+' '+cy;s+='<path d="'+p+'" fill="none" stroke="#D9342B" stroke-width="3" stroke-linejoin="round"/>';}
+      if(!PZ.cut)s+='<path d="M24 '+(cy-30)+' L'+(sx(PZ.x)-6)+' '+(cy-18)+'" stroke="#854F0B" stroke-width="3" fill="none"/>';
+      else s+='<path d="M24 '+(cy-30)+' l18 6 M'+(sx(PZ.x)-6)+' '+(cy-18)+' l-10 -3" stroke="#854F0B" stroke-width="3" fill="none" stroke-linecap="round"/>';}
+    const px=Math.min(sx(PZ.x),322);
+    if(sc.tow){const pxp=px+96;if(!PZ.cut)s+='<line x1="'+(px+28)+'" y1="'+(cy+6)+'" x2="'+(pxp-30)+'" y2="'+(cy-2)+'" stroke="#854F0B" stroke-width="3"/>';else s+='<path d="M'+(px+28)+' '+(cy+6)+' l10 -2 M'+(pxp-30)+' '+(cy-2)+' l-10 1" stroke="#854F0B" stroke-width="3" stroke-linecap="round"/>';s+=pzPerson(pxp,gy,-1);}
+    if(PZ.S.FT>0&&!sc.tow&&!sc.spring&&!sc.space){const d=(st.forces.FT||{d:'R'}).d,sgn=d==='R'?1:-1,ex=px+sgn*92;s+='<line x1="'+(px+sgn*28)+'" y1="'+(cy+6)+'" x2="'+(ex-sgn*30)+'" y2="'+(cy-2)+'" stroke="#854F0B" stroke-width="3"/>'+pzPerson(ex,gy,-sgn);}
+    if(PZ.S.Fapp>0&&!sc.space){const d=(st.forces.Fapp||{d:'R'}).d,sgn=d==='R'?-1:1;s+=pzPerson(px+sgn*({crate:50,cart:58,sled:62}[sc.obj]||50),gy,-sgn);}
+    s+=pzObject(sc.obj,px,sc.space?cy-4:cy);
+    s+=pzArrows(px,sc.space?cy-4:cy,st,PZEXT[sc.obj]);
+  }else{
+    svg.setAttribute('viewBox','0 0 340 300');
+    const top=44,fy=244,ky=(fy-top)/sc.ymax,py=y=>fy-y*ky;
+    const hH={treat:14,bucket:14,elevator:24,crate:16,crateV:24}[sc.obj]||14;
+    const cy=py(PZ.y)-hH,cx=170;
+    s+='<rect x="90" y="8" width="160" height="10" rx="2" fill="#5B6784"/>';
+    if(sc.floor==='bowl'){s+='<path d="M120 '+fy+' h100 l-12 26 h-76Z" fill="#D85A30" stroke="#712B13" stroke-width="2"/><ellipse cx="170" cy="'+fy+'" rx="50" ry="6" fill="#F0997B"/>';}
+    else if(sc.floor==='platform')s+='<rect x="110" y="'+fy+'" width="120" height="14" fill="#8A5A2B" stroke="#4B2E12"/>';
+    else if(sc.floor==='floor'||sc.floor==='pad')s+='<rect x="10" y="'+fy+'" width="320" height="'+(sc.floor==='pad'?14:8)+'" fill="'+(sc.floor==='pad'?'#9BD9BE':'#D3D1C7')+'" stroke="#5B6784"/>'+(sc.floor==='pad'?'<text x="170" y="'+(fy+26)+'" text-anchor="middle" font-size="11" fill="#5B6784">soft pad</text>':'');
+    else{s+='<line x1="120" y1="20" x2="120" y2="'+fy+'" stroke="#B4B2A9" stroke-width="3"/><line x1="220" y1="20" x2="220" y2="'+fy+'" stroke="#B4B2A9" stroke-width="3"/><line x1="10" y1="'+fy+'" x2="330" y2="'+fy+'" stroke="#5B6784" stroke-width="2"/>';}
+    if(sc.target){const a=py(sc.target[1]),b=py(sc.target[0]);s+='<rect x="236" y="'+a+'" width="90" height="'+(b-a)+'" fill="rgba(18,135,95,.2)" stroke="#12875F" stroke-dasharray="4 3"/><text x="281" y="'+(a-4)+'" text-anchor="middle" font-size="11" fill="#12875F">'+(sc.targetLabel||'target')+'</text>';}
+    if(sc.shelf){const ys=py(sc.shelf);s+='<rect x="236" y="'+ys+'" width="90" height="8" fill="#8A5A2B"/><text x="281" y="'+(ys-4)+'" text-anchor="middle" font-size="11" fill="#5B6784">shelf (6 m)</text>';}
+    if(sc.rope){const topy=cy-hH;if(!PZ.cut)s+='<line x1="'+cx+'" y1="18" x2="'+cx+'" y2="'+topy+'" stroke="#854F0B" stroke-width="3"/>';else s+='<path d="M'+cx+' 18 l-5 22 M'+cx+' '+topy+' l6 -16" stroke="#854F0B" stroke-width="3" fill="none" stroke-linecap="round"/>';}
+    s+=pzObject(sc.obj,cx,cy);s+=pzArrows(cx,cy,st,PZEXT[sc.obj]);
+  }
+  svg.innerHTML=s;
+}
+$('pzBackBtn').onclick=()=>{homeInfo();screen('s-home');};
+$('btnPZ').onclick=()=>{if(needInitials()){G.from='s-home';openPZMenu();}};
+
+function pzPlan(){const lv=curL(),st=curS(),sol=(lv.sol&&lv.sol[PZ.si])||{};const saved=PZ.S;const tmp={};ORDER.forEach(k=>tmp[k]=0);
+  Object.keys(st.forces).forEach(k=>{if(st.forces[k].n==='free')tmp[k]=sol[k]!=null?sol[k]:0;});
+  PZ.S=tmp;Object.keys(st.forces).forEach(k=>{if(typeof st.forces[k].n==='number')tmp[k]=st.forces[k].n/10;});
+  Object.keys(st.forces).forEach(k=>{const n=st.forces[k].n;if(n==='adjust'||n==='fric')tmp[k]=expectedN(st,k)/10;});
+  const out=Object.assign({},tmp);PZ.S=saved;return out;}
+
+if(!CASH_ON){['btnShop','resShop'].forEach(id=>{const b=$(id);if(b)b.style.display='none';});}
+if(!LB_ON){['btnHS','resPost','resRetry'].forEach(id=>{const b=$(id);if(b)b.style.display='none';});const tc=$('resTabs').closest('.card');if(tc)tc.style.display='none';}
+window.__fbd={SCEN,G,predictAnswer,arrowsOf,PZ,LEVELS,pzPlan};
+homeInfo();dogs();
+try{if(!localStorage.getItem('fbd_seen'))screen('s-how');}catch(e){}
+</script>
+<script>
+(function(){
+
+const $=id=>document.getElementById(id);
+const rnd=n=>Math.floor(Math.random()*n);
+const shuffle=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=rnd(i+1);[a[i],a[j]]=[a[j],a[i]];}return a;};
+const store={get(k,d){try{const v=localStorage.getItem(k);return v?JSON.parse(v):d;}catch(e){return d;}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v));}catch(e){}}};
+const DONE=new Set(store.get('fbdl_done',[]));
+const WROTE=new Set(store.get('fbdl_wrote',[]));
+const REDLIST=[];
+
+/* ---------- force drawing (shared with Force Fetch) ---------- */
+const FC={Fg:'#7A4BD1',FN:'#12875F',FT:'#E6007E',Ffr:'#D17A00',Fapp:'#0B5FD8',Fsp:'#D9342B',Fm:'#6B7385'};
+const NAME={Fg:'Gravity',FN:'Normal',FT:'Tension',Ffr:'Friction',Fapp:'Applied',Fsp:'Spring'};
+const ORDER=['Fg','FN','FT','Ffr','Fapp','Fsp'];
+const DEFD={Fg:'D',FN:'U',FT:'R',Ffr:'L',Fapp:'R',Fsp:'R'};
+const VEC={U:[0,-1],D:[0,1],L:[-1,0],R:[1,0]};
+const WORD=['off','short','medium','long'];
+const PX=[0,38,66,96],CX=170,CY=128;
+const col=k=>FC[k]||'#6B7385';
+function padSVG(arrows,opts){
+  opts=opts||{};
+  let s='<defs>'+Object.keys(FC).map(k=>'<marker id="'+(opts.id||'')+'mk'+k+'" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M1 1L9 5L1 9Z" fill="'+FC[k]+'"/></marker>').join('')+'</defs>';
+  s+='<rect x="0" y="0" width="340" height="260" rx="12" fill="#F7FAFF"/>';
+  const grp={};arrows.forEach((a,i)=>{if(a.l)(grp[a.d]=grp[a.d]||[]).push(i);});
+  const off={};Object.values(grp).forEach(ix=>ix.forEach((i,j)=>{off[i]=(j-(ix.length-1)/2)*18;}));
+  arrows.forEach((a,i)=>{
+    if(!a.l)return;const v=VEC[a.d],L=PX[a.l],o=off[i]||0,ox=v[0]?0:o,oy=v[1]?0:o;
+    const x1=CX+ox,y1=CY+oy,x2=CX+v[0]*L+ox,y2=CY+v[1]*L+oy;
+    s+='<line x1="'+x1+'" y1="'+y1+'" x2="'+x2+'" y2="'+y2+'" stroke="'+col(a.key)+'" stroke-width="6" stroke-linecap="round" marker-end="url(#'+(opts.id||'')+'mk'+a.key+')"/>';
+    let tx=x2,ty=y2,an='middle';
+    if(v[0]>0){tx=x2+9;ty=y2+5;an='start';}else if(v[0]<0){tx=x2-9;ty=y2+5;an='end';}else if(v[1]>0){ty=y2+20;}else{ty=y2-10;}
+    s+='<text x="'+tx+'" y="'+ty+'" text-anchor="'+an+'" font-size="14" font-weight="700" fill="#14213D">'+(a.label||NAME[a.key])+'</text>';
+  });
+  s+='<circle cx="'+CX+'" cy="'+CY+'" r="10" fill="#14213D"/>';
+  return s;
+}
+function sceneSVG(sc){
+  const g='<line x1="10" y1="66" x2="330" y2="66" stroke="#5B6784" stroke-width="2"/>';
+  const K={
+   book:g+'<rect x="110" y="56" width="120" height="10" fill="#B07A45"/><rect x="140" y="42" width="60" height="14" rx="2" fill="#0B5FD8"/><rect x="146" y="46" width="48" height="3" fill="#fff"/>',
+   chand:'<rect x="90" y="4" width="160" height="8" fill="#5B6784"/><line x1="170" y1="12" x2="170" y2="38" stroke="#5B6784" stroke-width="3"/><ellipse cx="170" cy="48" rx="34" ry="9" fill="#D9A400"/><line x1="140" y1="50" x2="132" y2="64" stroke="#D9A400" stroke-width="3"/><line x1="200" y1="50" x2="208" y2="64" stroke="#D9A400" stroke-width="3"/><line x1="170" y1="52" x2="170" y2="68" stroke="#D9A400" stroke-width="3"/>',
+   crate:g+'<rect x="150" y="30" width="36" height="36" fill="#B07A45" stroke="#6B4528" stroke-width="2"/><line x1="150" y1="30" x2="186" y2="66" stroke="#6B4528"/><line x1="186" y1="30" x2="150" y2="66" stroke="#6B4528"/><circle cx="108" cy="22" r="8" fill="#B5D4F4" stroke="#185FA5"/><line x1="108" y1="30" x2="108" y2="52" stroke="#185FA5" stroke-width="3"/><line x1="108" y1="52" x2="100" y2="66" stroke="#185FA5" stroke-width="3"/><line x1="108" y1="52" x2="116" y2="66" stroke="#185FA5" stroke-width="3"/><line x1="108" y1="36" x2="146" y2="44" stroke="#185FA5" stroke-width="3"/>',
+   sled:g+'<rect x="120" y="54" width="90" height="8" rx="2" fill="#B07A45"/><path d="M116 62 Q110 66 122 66" fill="none" stroke="#B07A45" stroke-width="3"/><circle cx="165" cy="40" r="12" fill="#D9A066" stroke="#8A5A2B"/><path d="M155 32 L150 46 L158 42Z" fill="#8A5A2B"/><circle cx="170" cy="38" r="2" fill="#14213D"/><line x1="210" y1="56" x2="270" y2="46" stroke="#5B6784" stroke-width="2"/><circle cx="280" cy="30" r="8" fill="#B5D4F4" stroke="#185FA5"/><line x1="280" y1="38" x2="280" y2="58" stroke="#185FA5" stroke-width="3"/>',
+   ball:g+'<circle cx="170" cy="48" r="16" fill="#F5A300" stroke="#14213D" stroke-width="2"/><path d="M160 42 Q170 36 180 42" fill="none" stroke="#14213D" stroke-width="2"/>',
+   skate:g+'<rect x="136" y="48" width="68" height="6" rx="3" fill="#7A4BD1"/><circle cx="150" cy="60" r="6" fill="#14213D"/><circle cx="190" cy="60" r="6" fill="#14213D"/><circle cx="100" cy="22" r="8" fill="#B5D4F4" stroke="#185FA5"/><line x1="100" y1="30" x2="100" y2="52" stroke="#185FA5" stroke-width="3"/><line x1="100" y1="52" x2="94" y2="66" stroke="#185FA5" stroke-width="3"/><line x1="100" y1="52" x2="108" y2="66" stroke="#185FA5" stroke-width="3"/><line x1="100" y1="36" x2="132" y2="46" stroke="#185FA5" stroke-width="3"/>',
+   toss:'<line x1="10" y1="72" x2="330" y2="72" stroke="#5B6784" stroke-width="2"/><circle cx="170" cy="40" r="14" fill="#F5A300" stroke="#14213D" stroke-width="2"/><path d="M162 34 Q170 28 178 34" fill="none" stroke="#14213D" stroke-width="2"/>'
+  };
+  Object.assign(K,imgScenes(sc));let inner=K[sc.kind]||g;if(sc.flip)inner='<g transform="translate(340,0) scale(-1,1)">'+inner+'</g>';
+  return '<svg viewBox="'+(sc.kind==='sled'?'0 -44 340 124':'0 0 340 80')+'" width="100%" role="img" aria-label="'+sc.title+'">'+inner+'</svg>';
+}
+const SCEN=[
+{id:'book',kind:'book',obj:'book',title:'Book on a desk',story:'A book sits on a desk.',f:{Fg:['D',2],FN:['U',2]},rules:[['Fg','=','FN',"The book isn't moving up or down, so Gravity and Normal are the same length."]]},
+{id:'chand',kind:'chand',obj:'chandelier',title:'Chandelier',story:'A chandelier hangs still from the ceiling.',f:{FT:['U',2],Fg:['D',2]},rules:[['FT','=','Fg','It hangs still, so the pull up equals the pull down.']]},
+{id:'crate',kind:'crate',obj:'crate',title:'Pushing a crate',story:'Mr. Ward pushes a crate to the right and it speeds up.',f:{Fapp:['R',3],Ffr:['L',1],Fg:['D',2],FN:['U',2]},rules:[['Fg','=','FN',"The crate isn't moving up or down, so Gravity and Normal match."],['Fapp','>','Ffr','It speeds up to the right, so the push is longer than friction.']]},
+{id:'sled',kind:'sled',obj:'sled',title:"Murphy's sled",story:"Mr. Ward pulls Murphy's sled to the right with a rope and the sled speeds up.",f:{FT:['R',3],Ffr:['L',1],Fg:['D',2],FN:['U',2]},rules:[['Fg','=','FN',"The sled isn't moving up or down, so Gravity and Normal match."],['FT','>','Ffr','It speeds up to the right, so the pull is longer than friction.']]},
+{id:'ball',kind:'ball',obj:'ball',title:'Rolling ball',story:'A ball rolls to the right across a plush carpet and slows down.',f:{Ffr:['L',1],Fg:['D',2],FN:['U',2]},rules:[['Fg','=','FN',"The ball isn't moving up or down, so Gravity and Normal match."]]},
+{id:'skate',kind:'skate',obj:'skateboard',title:'Skateboard',story:'A student pushes a skateboard to the right at a steady speed.',f:{Fapp:['R',2],Ffr:['L',2],Fg:['D',2],FN:['U',2]},rules:[['Fg','=','FN',"The skateboard isn't moving up or down, so Gravity and Normal match."],['Fapp','=','Ffr','A steady speed means the push and friction are the same length.']]},
+{id:'toss',kind:'toss',obj:'ball',bogus:'Force of the throw',title:'Tossed ball',story:"A ball has just left a student's hand and is flying upward. Ignore air.",f:{Fg:['D',2]},rules:[],move:'U'}
+];
+const byId=id=>SCEN.find(s=>s.id===id);
+const arrowsOf=sc=>Object.entries(sc.f).map(([key,[d,l]])=>({key,d,l}));
+const WHY={Ffr:'Friction points opposite the way the object slides, or is pushed or pulled.',FT:'A rope can only pull, so tension points along the rope.',Fapp:'The applied force points the way the push or pull goes.',Fsp:'A spring pushes the block away from the spring.'};
+const whyText=sc=>sc.rules.map(r=>r[3]).join(' ')||'Only gravity acts on it, so there is just one arrow.';
+function wrongDiagram(sc){
+  const base=arrowsOf(sc).map(a=>Object.assign({},a)),opts=[];
+  {const un=['Fapp','Ffr','FT','Fsp'].filter(k=>!sc.f[k]);const ch=[];
+   if(sc.move)ch.push({key:'Fm',d:sc.move,l:2,label:sc.bogus||'Force of motion',why:'Motion is not a force. Only draw forces that something exerts on the object.'});
+   un.forEach(k=>ch.push({key:k,d:DEFD[k],l:2,why:'Nothing is exerting a '+NAME[k].toLowerCase()+' force here.'}));
+   opts.push(()=>{const c=ch[rnd(ch.length)];return{shown:base.concat([{key:c.key,d:c.d,l:c.l,label:c.label}]),text:c.why};});}
+  {const keys=base.map((a,i)=>[a,i]).filter(([a])=>a.key!=='Fg'&&a.key!=='FN');
+   if(keys.length)opts.push(()=>{const [a,i]=keys[rnd(keys.length)];const sh=base.map(x=>Object.assign({},x));sh[i].d={U:'D',D:'U',L:'R',R:'L'}[a.d];return{shown:sh,text:NAME[a.key]+' points the wrong way. '+(WHY[a.key]||'')};});}
+  {const rl=sc.rules.filter(r=>r[1]==='='||r[1]==='>');
+   if(rl.length)opts.push(()=>{const r=rl[rnd(rl.length)];const sh=base.map(x=>Object.assign({},x));const ia=sh.findIndex(x=>x.key===r[0]),ib=sh.findIndex(x=>x.key===r[2]);
+     if(r[1]==='=')sh[ib].l=sh[ia].l===3?2:3;else{const t=sh[ia].l;sh[ia].l=sh[ib].l;sh[ib].l=t;}return{shown:sh,text:'One arrow is the wrong length. '+r[3]};});}
+  if(base.length>1)opts.push(()=>{const i=rnd(base.length);return{shown:base.filter((_,j)=>j!==i),text:'The '+NAME[base[i].key].toLowerCase()+' force is missing.'};});
+  opts.push(()=>{const i=rnd(base.length);const sh=base.map(x=>Object.assign({},x));sh[i].d={U:'D',D:'U',L:'R',R:'L'}[sh[i].d];return{shown:sh,text:NAME[sh[i].key]+' points the wrong way.'};});
+  return opts[rnd(opts.length)]();
+}
+
+/* ---------- UI building blocks ---------- */
+function h(tag,cls,html){const e=document.createElement(tag);if(cls)e.className=cls;if(html!=null)e.innerHTML=html;return e;}
+
+function Notes(stepId,items,onAll,startAll){
+  const wrap=h('div');let n=0;
+  const btn=h('button','btn pri full','Show the next note');
+  const more=h('div');more.appendChild(btn);
+  function add(){
+    const it=items[n];const id=stepId+'-'+n;n++;
+    const d=h('div','note'+(it.red?' red':''));
+    if(it.red){d.innerHTML='<span class="wd">WRITE THIS DOWN</span><div>'+it.t+'</div><label><input type="checkbox"> I wrote it</label>';
+      const cb=d.querySelector('input');cb.checked=WROTE.has(id);cb.onchange=()=>{cb.checked?WROTE.add(id):WROTE.delete(id);store.set('fbdl_wrote',[...WROTE]);};}
+    else d.innerHTML=it.t;
+    wrap.insertBefore(d,more);
+    if(n>=items.length){more.style.display='none';onAll&&onAll();}
+    else btn.textContent='Show the next note ('+(items.length-n)+' left)';
+  }
+  wrap.appendChild(more);
+  btn.onclick=add;
+  if(startAll){while(n<items.length)add();}
+  else add();
+  return wrap;
+}
+let curAns=null;
+function Checks(list,onDone,already){
+  const root=h('div');
+  if(already){root.appendChild(h('div','fb ok','Checkpoint complete. You can retry any time by picking another step and coming back.'));return root;}
+  let i=0;
+  function show(){
+    root.innerHTML='';const q=list[i];
+    const box=h('div','q');box.innerHTML='<span class="qtag">Checkpoint '+(i+1)+' of '+list.length+'</span><p style="font-weight:700;font-size:18px;margin:8px 0">'+q.q+'</p>'+(q.svg||'');
+    curAns=q.ans;
+    const fbEl=h('div');const nx=h('button','btn pri full',i===list.length-1?'Finish checkpoint':'Next question');nx.style.display='none';
+    let solved=false;
+    q.opts.forEach((o,k)=>{const b=h('button','opt',o);b.onclick=()=>{
+      if(solved)return;
+      if(k===q.ans){solved=true;b.classList.add('good');fbEl.className='fb ok';fbEl.innerHTML='Correct! '+q.explain;nx.style.display='block';}
+      else{b.classList.add('bad');fbEl.className='fb no';fbEl.innerHTML='Not quite. '+(q.hint||'Think about it again and try another answer.');}};box.appendChild(b);});
+    box.appendChild(fbEl);box.appendChild(nx);root.appendChild(box);
+    nx.onclick=()=>{i++;if(i>=list.length){root.innerHTML='';root.appendChild(h('div','fb ok','Checkpoint complete! Nice work. Press Next to continue.'));onDone();}else show();};
+  }
+  show();return root;
+}
+
+/* ---------- rocket ---------- */
+let rocketStop=null;
+function Rocket(root,onMission){
+  root.innerHTML='<div class="rk"><canvas id="rkc" style="height:200px" aria-label="Rocket in space"></canvas>'+
+   '<div class="eq" id="rkEq"></div>'+
+   '<div class="meters"><div class="m"><div class="n">Force</div><div class="v" id="rkF" style="color:#FFB020">0<small>N</small></div><div class="tr"><div class="fl" id="rkFf" style="background:#FFB020"></div></div></div>'+
+   '<div class="m"><div class="n">Acceleration</div><div class="v" id="rkA" style="color:#FF5AA8">0.00<small>m/s²</small></div><div class="tr"><div class="fl" id="rkAf" style="background:#FF5AA8"></div></div></div>'+
+   '<div class="m"><div class="n">Velocity</div><div class="v" id="rkV" style="color:#4FD1C5">0.0<small>m/s</small></div><div class="tr"><div class="fl" id="rkVf" style="background:#4FD1C5"></div></div></div></div>'+
+   '<div class="ctl"><div><button class="fire" id="rkFire">Hold to fire</button><label class="chk"><input type="checkbox" id="rkLatch"> Keep engine on</label></div>'+
+   '<div><button id="rkTurn">Turn around</button><div class="chk" id="rkFace" style="color:#9AA7D6">Facing forward</div></div>'+
+   '<div><label>Engine force: <b id="rkFo">3000 N</b></label><input type="range" id="rkForce" min="0" max="5000" step="100" value="3000"><label>Mass: <b id="rkMo">1000 kg</b></label><input type="range" id="rkMass" min="500" max="2000" step="100" value="1000"></div>'+
+   '<div><button id="rkReset">Reset</button></div></div>'+
+   '<canvas id="rkch" style="height:210px;margin-top:10px" aria-label="Force, acceleration and velocity graphs"></canvas></div>';
+  const q=s=>root.querySelector(s);
+  const sc=q('#rkc'),cc=q('#rkch'),sg=sc.getContext('2d'),cg=cc.getContext('2d');
+  const FMAX=5000,AMAX=10;
+  let v=0,mass=1000,eF=3000,facing=1,angle=0,tgt=0,turning=false,firing=false,vScale=20,F=0,a=0,hist=[],sT=0;
+  const M={A:{t:0,done:false},B:{t:0,done:false},C:{t:0,done:false},D:{t:0,done:false}};
+  let SW,SH,CW,CH;
+  function fit(c,g){const d=window.devicePixelRatio||1,w=c.clientWidth,hh=c.clientHeight;c.width=Math.round(w*d);c.height=Math.round(hh*d);g.setTransform(d,0,0,d,0,0);return[w,hh];}
+  function rs(){[SW,SH]=fit(sc,sg);[CW,CH]=fit(cc,cg);}
+  window.addEventListener('resize',rs);rs();
+  const stars=Array.from({length:70},()=>({x:Math.random(),y:Math.random(),z:.25+Math.random()*.75}));
+  const fire=q('#rkFire'),latch=q('#rkLatch');
+  const dn=e=>{firing=true;fire.classList.add('on');try{fire.setPointerCapture(e.pointerId);}catch(_){}e.preventDefault();};
+  const up=()=>{firing=false;fire.classList.remove('on');};
+  fire.addEventListener('pointerdown',dn);fire.addEventListener('pointerup',up);fire.addEventListener('pointercancel',up);fire.addEventListener('lostpointercapture',up);fire.addEventListener('contextmenu',e=>e.preventDefault());
+  const turn=()=>{if(turning)return;facing=-facing;tgt+=Math.PI;turning=true;};
+  q('#rkTurn').onclick=turn;
+  const reset=()=>{v=0;angle=0;tgt=0;facing=1;turning=false;hist=[];vScale=20;latch.checked=false;};
+  q('#rkReset').onclick=reset;
+  q('#rkForce').oninput=e=>{eF=+e.target.value;q('#rkFo').textContent=eF+' N';};
+  q('#rkMass').oninput=e=>{mass=+e.target.value;q('#rkMo').textContent=mass+' kg';};
+  const kd=e=>{if(e.code==='Space'){e.preventDefault();if(!e.repeat){firing=true;fire.classList.add('on');}}else if(e.code==='KeyT')turn();else if(e.code==='KeyR')reset();};
+  const ku=e=>{if(e.code==='Space'){firing=false;fire.classList.remove('on');}};
+  window.addEventListener('keydown',kd);window.addEventListener('keyup',ku);
+  const sgn=(n,d)=>(n>0?'+':n<0?'-':'')+Math.abs(n).toFixed(d);
+  function bar(el,val,r){const p=Math.max(-1,Math.min(1,val/r))*50;if(p>=0){el.style.left='50%';el.style.width=p+'%';}else{el.style.left=(50+p)+'%';el.style.width=(-p)+'%';}}
+  function ui(){
+    q('#rkF').firstChild.nodeValue=(F>0?'+':F<0?'-':'')+Math.abs(Math.round(F));q('#rkA').firstChild.nodeValue=sgn(a,2);q('#rkV').firstChild.nodeValue=sgn(v,1);
+    bar(q('#rkFf'),F,FMAX);bar(q('#rkAf'),a,AMAX);bar(q('#rkVf'),v,vScale);
+    q('#rkFace').textContent=turning?'Turning...':(facing>0?'Facing forward':'Facing backward');
+    q('#rkEq').textContent=F!==0?('a = F ÷ m = '+sgn(F,0)+' N ÷ '+mass+' kg = '+sgn(a,2)+' m/s²'):(turning?'Turning around...':'F = 0 N, so a = 0 m/s². Velocity stays '+sgn(v,1)+' m/s.');
+  }
+  function drawSpace(dt){
+    const g=sg;g.clearRect(0,0,SW,SH);g.lineCap='round';
+    for(const s of stars){s.x-=(v*6*s.z*dt)/SW;s.x=((s.x%1)+1)%1;const px=s.x*SW,py=s.y*SH,len=Math.max(1.5,Math.min(80,Math.abs(v)*1.2*s.z));
+      g.strokeStyle='rgba(220,230,255,'+(.35+.5*s.z)+')';g.lineWidth=1+s.z*1.2;g.beginPath();g.moveTo(px,py);g.lineTo(px+(v>=0?len:-len),py);g.stroke();}
+    const cx=SW/2,cy=SH/2+6,k=Math.min(1,SW/700)*.8;
+    g.save();g.translate(cx,cy);g.rotate(angle);g.scale(k,k);
+    if(F!==0){const L=28+(eF/FMAX)*95+Math.random()*14;g.fillStyle='#FF7A18';g.beginPath();g.moveTo(-52,-12);g.lineTo(-52-L,0);g.lineTo(-52,12);g.closePath();g.fill();g.fillStyle='#FFE08A';g.beginPath();g.moveTo(-52,-7);g.lineTo(-52-L*.6,0);g.lineTo(-52,7);g.closePath();g.fill();}
+    g.fillStyle='#4FD1C5';g.beginPath();g.moveTo(-40,-20);g.lineTo(-62,-42);g.lineTo(-18,-20);g.closePath();g.fill();g.beginPath();g.moveTo(-40,20);g.lineTo(-62,42);g.lineTo(-18,20);g.closePath();g.fill();
+    g.fillStyle='#EAF0FF';g.beginPath();g.moveTo(-52,-20);g.lineTo(34,-20);g.quadraticCurveTo(80,-18,88,0);g.quadraticCurveTo(80,18,34,20);g.lineTo(-52,20);g.closePath();g.fill();
+    g.fillStyle='#FF5AA8';g.beginPath();g.moveTo(34,-20);g.quadraticCurveTo(80,-18,88,0);g.quadraticCurveTo(80,18,34,20);g.closePath();g.fill();
+    g.fillStyle='#1B2A6B';g.beginPath();g.arc(8,0,9,0,Math.PI*2);g.fill();g.strokeStyle='#8FA3E8';g.lineWidth=2;g.stroke();
+    g.fillStyle='#6677bb';g.fillRect(-56,-11,6,22);g.restore();
+    const arrow=(val,range,y,color,label)=>{if(Math.abs(val)<1e-6)return;const len=Math.min(1,Math.abs(val)/range)*Math.min(150,SW*.25),dir=Math.sign(val),x1=cx+dir*Math.max(10,len);
+      g.strokeStyle=color;g.fillStyle=color;g.lineWidth=5;g.beginPath();g.moveTo(cx,y);g.lineTo(x1-dir*9,y);g.stroke();g.beginPath();g.moveTo(x1,y);g.lineTo(x1-dir*16,y-9);g.lineTo(x1-dir*16,y+9);g.closePath();g.fill();
+      g.font="700 13px 'Trebuchet MS',Verdana,sans-serif";g.textAlign=dir>0?'left':'right';g.fillText(label,x1+dir*8,y+5);};
+    arrow(F,FMAX,28,'#FFB020','Force');arrow(a,AMAX,SH-18,'#FF5AA8','Acceleration');
+  }
+  function drawChart(){
+    const g=cg;g.clearRect(0,0,CW,CH);g.fillStyle='#050818';
+    const B=[['F','Force (N)','#FFB020',()=>FMAX],['a','Acceleration (m/s²)','#FF5AA8',()=>AMAX],['v','Velocity (m/s)','#4FD1C5',()=>vScale]],bh=CH/3,l=8,r=CW-8,w=r-l;
+    B.forEach(([key,nm,c,R],i)=>{const y0=i*bh,mid=y0+bh/2,amp=bh/2-8;g.strokeStyle='#2A3566';g.lineWidth=1;g.beginPath();g.moveTo(l,mid);g.lineTo(r,mid);g.stroke();if(i>0){g.beginPath();g.moveTo(0,y0);g.lineTo(CW,y0);g.stroke();}
+      g.fillStyle=c;g.font="700 12px 'Trebuchet MS',Verdana,sans-serif";g.textAlign='left';g.fillText(nm,l+2,y0+14);
+      if(hist.length<2)return;g.strokeStyle=c;g.lineWidth=3;g.lineJoin='round';g.beginPath();
+      hist.forEach((s,j)=>{const px=r-(hist.length-1-j)*(w/199),py=mid-Math.max(-1,Math.min(1,s[key]/R()))*amp;j===0?g.moveTo(px,py):g.lineTo(px,py);});g.stroke();});
+  }
+  function missions(dt){
+    if(!M.A.done&&F>0&&facing>0){M.A.t+=dt;if(M.A.t>=2.5&&v>=4)fin('A');}
+    if(!M.B.done&&F===0&&!turning&&Math.abs(v)>=3){M.B.t+=dt;if(M.B.t>=2)fin('B');}
+    if(!M.C.done&&F!==0&&F*v<0&&Math.abs(v)>0.2){M.C.t+=dt;if(M.C.t>=1.5)fin('C');}
+    if(!M.D.done&&mass>=1900&&F!==0){M.D.t+=dt;if(M.D.t>=1.5)fin('D');}
+  }
+  function fin(k){M[k].done=true;onMission(k);}
+  let last=performance.now(),raf=0,alive=true;
+  function frame(now){
+    if(!alive)return;const dt=Math.min(.05,(now-last)/1000);last=now;
+    if(turning){angle=Math.min(tgt,angle+dt*Math.PI*1.6);if(angle>=tgt)turning=false;}
+    const on=(firing||latch.checked)&&!turning;F=on?facing*eF:0;a=F/mass;v+=a*dt;
+    while(Math.abs(v)>vScale*.95)vScale*=2;
+    sT+=dt;while(sT>=.05){sT-=.05;hist.push({F,a,v});if(hist.length>200)hist.shift();}
+    missions(dt);drawSpace(dt);drawChart();ui();raf=requestAnimationFrame(frame);
+  }
+  raf=requestAnimationFrame(frame);
+  rocketStop=()=>{alive=false;cancelAnimationFrame(raf);window.removeEventListener('keydown',kd);window.removeEventListener('keyup',ku);window.removeEventListener('resize',rs);rocketStop=null;};
+}
+
+/* ---------- steps ---------- */
+const RK_MISSIONS={
+ A:{t:'Fire the engine for about 3 seconds. Watch force, acceleration, and velocity.',note:'A force causes an <u>acceleration</u>: a = F ÷ m. While the force acts, the velocity keeps changing.'},
+ B:{t:'Cut the engine while the rocket is moving. What happens to the velocity?',note:'No force means no acceleration. The velocity stays the same, so a moving object does <u>not</u> need a force to keep moving.'},
+ C:{t:'Turn around, then fire the engine to slow the rocket down.',note:'A force opposite to the motion gives a negative acceleration (slowing down). The force changes the velocity, it does not "use up" the motion.'},
+ D:{t:'Set the mass to 2000 kg and fire. Compare the acceleration with a lighter rocket.',note:'The same force on a bigger mass gives a smaller acceleration (a = F ÷ m).'}
+};
+const STEPS=[
+{id:'hook',name:'Think first',title:'Think first',
+ build(c,done,already){
+  c.appendChild(h('div','card','<b>How this works</b><p style="margin:6px 0 0">Work through the steps in any order using the bar above. Notes appear one at a time. <b style="color:#D9342B">Anything in red goes in your notes.</b> Pass each checkpoint to unlock the Next button.</p>'));
+  const box=h('div','card','<p style="font-size:18px;margin:0 0 4px"><b>A hockey puck slides across smooth ice. There is almost no friction.</b></p><p style="margin:0">Does something need to keep pushing the puck forward to keep it moving?</p>');
+  c.appendChild(box);
+  box.appendChild(Checks([{q:'What do you think?',opts:['Yes. A force has to keep pushing it, or it will stop.','No. Once it is moving, it keeps moving without a force.'],ans:1,
+    hint:'That is what many people think, but test it later with the rocket. Try the other answer.',
+    explain:'Right. This is the big idea of the whole unit. We will test it with a rocket in step 4, where there is no friction at all.'}],done,already));
+ }},
+{id:'force',name:'What is a force?',title:'What is a force?',
+ notes:[
+  {t:'Every time an object speeds up, slows down, or turns, something is pushing or pulling on it.'},
+  {red:1,t:'Force: a push or pull on an object, caused by its interaction with another object.'},
+  {red:1,t:'Force is measured in Newtons (N).'},
+  {t:'1 N is the force that gives a 1 kg object an acceleration of 1 m/s². That is about the weight of a small apple.'},
+  {red:1,t:'A force changes an object\'s velocity (its speed or its direction). A change in velocity is <u>acceleration</u>.'},
+  {t:'Remember acceleration from Unit 1? Forces are the <i>cause</i> of it.'}],
+ checks:[{q:'What is the unit of force?',opts:['Newton (N)','Meter per second (m/s)','Kilogram (kg)'],ans:0,explain:'The Newton (N) is the unit of force.',hint:'Think of the scientist the unit is named after.'},
+  {q:'A force can change an object\'s...',opts:['speed only','direction only','speed, direction, or both'],ans:2,explain:'Any change in speed or direction is a change in velocity, which is acceleration.',hint:'Remember: velocity includes speed and direction.'}]},
+{id:'types',name:'Force types',title:'Types of force',
+ notes:[
+  {t:'Forces come in two families: <b>contact forces</b> (objects touch) and <b>non-contact forces</b> (they act across a distance).'},
+  {red:1,t:'Types of force<table><tr><th>Type</th><th>Symbol</th><th>Family</th></tr><tr><td>Applied</td><td>F<sub>app</sub></td><td>contact</td></tr><tr><td>Tension</td><td>F<sub>T</sub></td><td>contact</td></tr><tr><td>Normal</td><td>F<sub>N</sub></td><td>contact</td></tr><tr><td>Friction</td><td>F<sub>Fr</sub></td><td>contact</td></tr><tr><td>Spring</td><td>F<sub>spring</sub></td><td>contact</td></tr><tr><td>Gravity</td><td>F<sub>g</sub></td><td>non-contact</td></tr></table>'},
+  {t:'Examples: you <b>push</b> a box (applied). A chandelier hangs from a chain (<b>tension</b>). A table holds up a book (<b>normal</b>). Carpet slows a rolling ball (<b>friction</b>). A toy pops up from a spring (<b>spring</b>). Earth pulls a tossed ball back down (<b>gravity</b>).'},
+  {red:1,t:'Gravity pulls every object near Earth straight down, even without touching it.'}],
+ checks:[{q:'A book rests on a table. What force from the table holds the book up?',opts:['Gravity','Normal force','Tension'],ans:1,explain:'The table pushes up on the book. That is the normal force.',hint:'Which force is a surface pushing on an object?'},
+  {q:'A rope pulls a sled forward. What type of force is the rope?',opts:['Tension','Friction','Spring'],ans:0,explain:'A rope pulls through tension.',hint:'Which force pulls through a rope or string?'},
+  {q:'Which force acts WITHOUT touching the object?',opts:['Normal','Gravity','Applied'],ans:1,explain:'Earth pulls on you through gravity, even when you are not touching the ground.',hint:'Think of a ball falling after it leaves your hand.'}]},
+{id:'rocket',name:'Rocket lab',title:'Rocket lab: what does a force do?',
+ build(c,done,already){
+  c.appendChild(h('div','card','<p style="margin:0">Space has almost no friction, so a rocket shows what a force <i>really</i> does. Finish the four missions. Red notes appear as you finish each one.</p>'));
+  const rk=h('div');c.appendChild(rk);
+  const ml=h('div','miss');Object.keys(RK_MISSIONS).forEach(k=>{const d=h('div','', '<span class="ck" id="mck'+k+'"></span><span>'+RK_MISSIONS[k].t+'</span>');d.id='mm'+k;ml.appendChild(d);});c.appendChild(ml);
+  const notes=h('div');c.appendChild(notes);
+  const chk=h('div');c.appendChild(chk);
+  let n=0;
+  const doneSet=new Set();
+  function mission(k){
+    if(doneSet.has(k))return;doneSet.add(k);const d=document.getElementById('mm'+k);d.classList.add('ok');document.getElementById('mck'+k).textContent='\u2713';
+    const id='rocket-'+k;const nn=h('div','note red','<span class="wd">WRITE THIS DOWN</span><div>'+RK_MISSIONS[k].note+'</div><label><input type="checkbox"> I wrote it</label>');
+    const cb=nn.querySelector('input');cb.checked=WROTE.has(id);cb.onchange=()=>{cb.checked?WROTE.add(id):WROTE.delete(id);store.set('fbdl_wrote',[...WROTE]);};
+    notes.appendChild(nn);
+    if(doneSet.size===4)allDone();
+  }
+  function allDone(){
+    const id='rocket-big';const nn=h('div','note red','<span class="wd">WRITE THIS DOWN: BIG IDEA</span><div>Forces cause <u>acceleration</u>, not movement. An object does not need a force to keep moving.</div><label><input type="checkbox"> I wrote it</label>');
+    const cb=nn.querySelector('input');cb.checked=WROTE.has(id);cb.onchange=()=>{cb.checked?WROTE.add(id):WROTE.delete(id);store.set('fbdl_wrote',[...WROTE]);};notes.appendChild(nn);
+    notes.appendChild(h('div','note','On Earth, objects stop because <b>friction</b> is a force that slows them. In space nothing slows the rocket, so it keeps going.'));
+    chk.appendChild(Checks([
+     {q:'The engine shuts off while the rocket moves at 20 m/s. What happens to its velocity?',opts:['It drops to 0 right away','It stays 20 m/s','It keeps increasing'],ans:1,explain:'No force means no acceleration, so the velocity stays the same.',hint:'Look at your B mission. What did the velocity do when the force was 0?'},
+     {q:'A 3000 N force acts on a 1000 kg rocket. What is its acceleration?',opts:['3 m/s²','3000 m/s²','0.33 m/s²'],ans:0,explain:'a = F ÷ m = 3000 ÷ 1000 = 3 m/s².',hint:'Use a = F ÷ m and check it against the equation shown on the rocket.'},
+     {q:'Complete the sentence: Forces cause...',opts:['acceleration (a change in velocity), not movement itself','movement itself, not acceleration','only a change in direction'],ans:0,explain:'A force changes velocity. Motion alone does not need a force.',hint:'Remember what happened when the engine was off.'}],done,false));
+  }
+  if(already){chk.appendChild(Checks([],done,true));}
+  Rocket(rk,mission);
+  c._cleanup=()=>{rocketStop&&rocketStop();};
+ }},
+{id:'arrows',name:'Force arrows',title:'Drawing forces as arrows',
+ notes:[
+  {t:'Scientists draw a force as an arrow, so we can see its size and direction at a glance.'},
+  {red:1,t:'<b>Direction:</b> the arrow points the way the force acts <u>on the object</u>.'},
+  {red:1,t:'<b>Length:</b> a longer arrow means a stronger force.'}],
+ extra(c){
+  const big=(l,t)=>'<div style="text-align:center"><svg viewBox="0 0 220 90" width="100%"><rect x="130" y="20" width="50" height="50" fill="#C9D6EE" stroke="#14213D" stroke-width="3"/><line x1="'+(130-(l))+'" y1="45" x2="124" y2="45" stroke="#0B5FD8" stroke-width="7" stroke-linecap="round"/><path d="M130 45 l-14 -9 l0 18Z" fill="#0B5FD8"/></svg><b>'+t+'</b></div>';
+  return '<div class="card"><div class="row">'+big(36,'Small push')+big(100,'BIG push')+'</div></div>';
+ },
+ checks:[
+  {q:'Which diagram shows the stronger force?',svg:'<div class="row" style="margin:6px 0"><div style="text-align:center"><svg viewBox="0 0 220 60" width="100%"><line x1="30" y1="30" x2="184" y2="30" stroke="#0B5FD8" stroke-width="7" stroke-linecap="round"/><path d="M200 30 l-16 -10 l0 20Z" fill="#0B5FD8"/></svg><b>Diagram A</b></div><div style="text-align:center"><svg viewBox="0 0 220 60" width="100%"><line x1="130" y1="30" x2="184" y2="30" stroke="#0B5FD8" stroke-width="7" stroke-linecap="round"/><path d="M200 30 l-16 -10 l0 20Z" fill="#0B5FD8"/></svg><b>Diagram B</b></div></div>',opts:['Diagram A','Diagram B','They are the same'],ans:0,explain:'A longer arrow means a stronger force.',hint:'Compare the lengths of the arrows.'},
+  {q:'A student pushes a box to the right. Which way does the applied-force arrow point?',opts:['Left, toward the student','Right, the way the push goes','Straight down'],ans:1,explain:'The arrow shows the way the force acts on the object.',hint:'The arrow shows the direction of the force on the box.'}]},
+{id:'fbd',name:'Draw an FBD',title:'Free-body diagrams',
+ notes:[
+  {red:1,t:'<b>Free-body diagram (FBD):</b> a picture that shows all the forces acting on one object.'},
+  {red:1,t:'How to draw one<ol><li>Pick the object. (More than one object means more than one diagram.)</li><li>List every force acting <u>directly on it</u> and what is exerting each force.</li><li>Draw a dot or box for the object.</li><li>Draw an arrow for each force. Label it with its type and its source. Longer arrow = stronger force.</li></ol>'},
+  {t:'Every arrow needs a <b>source</b>: something touching the object, or Earth pulling it with gravity. No source means no arrow.'},
+  {red:1,t:'Motion is not a force. Never draw a "force of motion" or "force of the throw".'},
+  {t:'Watch the crate build below. Press the button to add each force.'}],
+ extra:'crate',
+ checks:[{q:'Which of these is NOT allowed on a free-body diagram of a ball flying upward after it was thrown (ignore air)?',opts:['Gravity pulling down','A "force of the throw" pushing up','Nothing, both are fine'],ans:1,explain:'After the ball leaves the hand, nothing is touching it. Only gravity acts on it.',hint:'Ask: what is exerting that force on the ball right now?'},
+  {q:'What does every arrow on an FBD need?',opts:['A color','A source that is exerting the force','The same length as the others'],ans:1,explain:'If you cannot name what is exerting a force, it does not belong on the diagram.',hint:'Think about step 2 of the FBD steps.'}]},
+{id:'pick',name:'Pick the diagram',title:'Pick the best diagram',custom:'pick'},
+{id:'build',name:'Build your own',title:'Build your own diagrams',custom:'build'},
+{id:'notes',name:'My notes',title:'My notes checklist',custom:'notes'}
+];
+
+/* ---------- crate stager ---------- */
+function crateWidget(){
+  const w=h('div','card');
+  const stages=[
+   {cap:'Step 1 and 3: The object is the crate. Draw a dot for it.',ar:[]},
+   {cap:'Step 2 and 4: Earth pulls the crate down. Add gravity.',ar:[{key:'Fg',d:'D',l:2}]},
+   {cap:'The floor pushes up on the crate. Add the normal force. The arrows match because the crate is not moving up or down.',ar:[{key:'Fg',d:'D',l:2},{key:'FN',d:'U',l:2}]},
+   {cap:'Now a worker pushes the crate to the right. Add the applied force and friction from the floor. The push is longer than friction, so the crate speeds up.',ar:[{key:'Fg',d:'D',l:2},{key:'FN',d:'U',l:2},{key:'Fapp',d:'R',l:3},{key:'Ffr',d:'L',l:1}]}
+  ];
+  let i=0;
+  const s=h('div');const cap=h('p','',''); cap.style.fontWeight='700';
+  const b=h('button','btn pri full','Add the next force');
+  const draw=()=>{s.innerHTML='<svg viewBox="0 0 340 260" width="100%" role="img" aria-label="Crate free-body diagram">'+padSVG(stages[i].ar,{id:'cw'})+'</svg>';cap.textContent=stages[i].cap;
+    if(i>=stages.length-1){b.textContent='Start over';}else b.textContent='Add the next force';};
+  b.onclick=()=>{i=(i+1)%stages.length;draw();};
+  w.appendChild(s);w.appendChild(cap);w.appendChild(b);draw();return w;
+}
+
+/* ---------- pick the diagram ---------- */
+function PickStep(c,done,already){
+  if(already)c.appendChild(h('div','fb ok','Complete. You can practice more below.'));
+  c.appendChild(h('div','card','<p style="margin:0">Read each story. Pick the diagram that shows the forces best. Each wrong diagram has one mistake.</p>'));
+  const ids=shuffle(['book','chand','crate','sled','ball','skate','toss']).slice(0,4);
+  let i=0;const area=h('div');c.appendChild(area);
+  function show(){
+    area.innerHTML='';const sc=byId(ids[i]);
+    const card=h('div','card');card.innerHTML='<span class="qtag">Scenario '+(i+1)+' of '+ids.length+'</span><p style="font-size:18px;font-weight:700;margin:8px 0 4px">'+sc.story+'</p>'+sceneSVG(sc);
+    const good={shown:arrowsOf(sc),text:'',ok:1};const opts=[good];const sigs=new Set([JSON.stringify(good.shown)]);let tries=0;
+    while(opts.length<3&&tries++<40){const w=wrongDiagram(sc);const sg=JSON.stringify(w.shown);if(!sigs.has(sg)){sigs.add(sg);opts.push(w);}}
+    const order=shuffle(opts);
+    const grid=h('div','dgrid');const fbEl=h('div');const nx=h('button','btn pri full',i===ids.length-1?'Finish':'Next scenario');nx.style.display='none';
+    let solved=false;
+    order.forEach((o,k)=>{const b=h('button','dopt','<svg viewBox="0 0 340 260" width="100%" role="img" aria-label="Diagram '+'ABC'[k]+'">'+padSVG(o.shown,{id:'p'+k})+'</svg>Diagram '+'ABC'[k]);
+      b.onclick=()=>{if(solved)return;
+        if(o.ok){solved=true;b.classList.add('good');fbEl.className='fb ok';fbEl.innerHTML='Correct! '+whyText(sc);nx.style.display='block';}
+        else{b.classList.add('bad');fbEl.className='fb no';fbEl.innerHTML='Not that one. '+o.text+' Try another diagram.';}};grid.appendChild(b);});
+    card.appendChild(grid);card.appendChild(fbEl);card.appendChild(nx);area.appendChild(card);
+    nx.onclick=()=>{i++;if(i>=ids.length){area.innerHTML='';area.appendChild(h('div','fb ok','All four scenarios complete! Press Next to continue.'));done();}else show();};
+  }
+  show();
+}
+
+/* ---------- build your own ---------- */
+function BuildStep(c,done,already){
+  if(already)c.appendChild(h('div','fb ok','Complete. You can practice more below.'));
+  c.appendChild(h('div','card','<p style="margin:0">Build the free-body diagram for each story. Tap a force to add it. Tap again to make it longer. Check your diagram when you are ready.</p>'));
+  const ids=shuffle(['book','chand','crate','sled','ball','skate','toss']).slice(0,3);
+  let i=0;const area=h('div');c.appendChild(area);
+  function show(){
+    area.innerHTML='';const sc=byId(ids[i]);const S={};ORDER.forEach(k=>S[k]=0);let att=0,solved=false;
+    const card=h('div','card');card.innerHTML='<span class="qtag">Diagram '+(i+1)+' of '+ids.length+'</span><p style="font-size:18px;font-weight:700;margin:8px 0 4px">'+sc.story+'</p>'+sceneSVG(sc)+'<svg id="bp" viewBox="0 0 340 260" width="100%" style="margin-top:8px" role="img" aria-label="Your diagram"></svg><div class="chips" id="bchips"></div>';
+    const fbEl=h('div');const nx=h('button','btn pri full',i===ids.length-1?'Finish':'Next diagram');nx.style.display='none';
+    const rowb=h('div','row');const chk=h('button','btn pri','Check my diagram');const clr=h('button','btn','Clear');rowb.appendChild(chk);rowb.appendChild(clr);
+    const show_me=h('button','btn full','Show me the answer');show_me.style.display='none';
+    card.appendChild(rowb);card.appendChild(show_me);card.appendChild(fbEl);card.appendChild(nx);area.appendChild(card);
+    const bp=card.querySelector('#bp'),chips=card.querySelector('#bchips');
+    const draw=()=>{const arr=ORDER.filter(k=>S[k]).map(k=>({key:k,d:(sc.f[k]?sc.f[k][0]:DEFD[k]),l:S[k]}));bp.innerHTML=padSVG(arr,{id:'b'});
+      chips.innerHTML='';ORDER.forEach(k=>{const b=h('button','chip'+(S[k]?' on':''),'<span><span class="dot" style="background:'+col(k)+'"></span>'+NAME[k]+'</span><span class="st">'+WORD[S[k]]+'</span>');b.style.borderColor=S[k]?col(k):'';
+        b.onclick=()=>{if(solved)return;S[k]=(S[k]+1)%4;fbEl.className='';fbEl.innerHTML='';draw();};chips.appendChild(b);});};
+    draw();
+    clr.onclick=()=>{if(solved)return;ORDER.forEach(k=>S[k]=0);fbEl.className='';fbEl.innerHTML='';draw();};
+    function win(txt){solved=true;nx.style.display='block';show_me.style.display='none';fbEl.className='fb ok';fbEl.innerHTML=txt;}
+    chk.onclick=()=>{if(solved)return;
+      const req=Object.keys(sc.f),have=ORDER.filter(k=>S[k]);
+      if(!have.length){fbEl.className='fb info';fbEl.textContent='Add at least one force first.';return;}
+      const missing=req.filter(k=>!S[k]),extra=have.filter(k=>!sc.f[k]);let msg='';
+      if(missing.length)msg=att>=1?('You need '+req.length+' force'+(req.length>1?'s':'')+' in total. Ask what touches the '+sc.obj+', and what pulls on it from far away.'):'A force is missing. What touches the '+sc.obj+'? What pulls on it from far away?';
+      else if(extra.length)msg=NAME[extra[0]]+" doesn't belong here. What would be exerting it on the "+sc.obj+'?';
+      else{const bad=sc.rules.find(r=>{const a=S[r[0]],b=S[r[2]];return r[1]==='='?a!==b:a<=b;});if(bad)msg=bad[3];}
+      if(!msg){win('Correct! '+whyText(sc));return;}
+      att++;fbEl.className='fb no';fbEl.innerHTML=msg;if(att>=3)show_me.style.display='block';};
+    show_me.onclick=()=>{bp.innerHTML=padSVG(arrowsOf(sc),{id:'b'});win('Here is the answer. '+whyText(sc));};
+    nx.onclick=()=>{i++;if(i>=ids.length){area.innerHTML='';area.appendChild(h('div','fb ok','All three diagrams complete! Press Next to continue.'));done();}else show();};
+  }
+  show();
+}
+
+/* ---------- notes checklist ---------- */
+function NotesStep(c,done){
+  done();
+  const card=h('div','card');card.id='printArea';
+  card.innerHTML='<h2>Everything in red</h2><p class="muted">Check each box when you have it written in your notes. Notes you unlocked in the steps show here.</p>';
+  const list=h('div');
+  STEPS.forEach(st=>{
+    if(st.notes){st.notes.forEach((nt,i)=>{if(nt.red)list.appendChild(chk(st.id+'-'+i,st.name,nt.t));});}
+    if(st.id==='rocket'){Object.keys(RK_MISSIONS).forEach(k=>list.appendChild(chk('rocket-'+k,'Rocket lab',RK_MISSIONS[k].note)));list.appendChild(chk('rocket-big','Rocket lab','Forces cause <u>acceleration</u>, not movement. An object does not need a force to keep moving.'));}
+  });
+  function chk(id,src,html){const d=h('div','check','<input type="checkbox"><div><div>'+html+'</div><small>'+src+'</small></div>');const cb=d.querySelector('input');cb.checked=WROTE.has(id);cb.onchange=()=>{cb.checked?WROTE.add(id):WROTE.delete(id);store.set('fbdl_wrote',[...WROTE]);};return d;}
+  card.appendChild(list);
+  const pr=h('button','btn full noprint','Print this checklist');pr.onclick=()=>window.print();card.appendChild(pr);
+  c.appendChild(card);
+  const big=h('div','card','<b>The three big ideas</b><ol style="line-height:1.6"><li>A force is a push or pull on an object. It is measured in Newtons.</li><li>Forces cause acceleration (a change in velocity), not movement. No force means the velocity stays the same.</li><li>A free-body diagram shows every force on one object, with arrows for direction and length for strength.</li></ol>');
+  c.appendChild(big);
+  const rc=h('div','card noprint');
+  const nDone=STEPS.slice(0,8).filter(s=>DONE.has(s.id)).length,all=nDone===8;
+  const lastIni=(()=>{try{return localStorage.getItem('fbd_last')||'';}catch(e){return'';}})();
+  rc.innerHTML='<b>Class Cash for finishing the lesson</b>'+(all?'<p style="margin:6px 0">Enter your initials to claim <b>5 Class Cash</b> (one time only).</p><input class="ini" id="lsIni" maxlength="3" autocomplete="off" autocapitalize="characters" spellcheck="false" aria-label="Three initials" placeholder="ABC" value="'+lastIni+'"><div class="fb" id="lsMsg" style="display:none"></div><button class="btn pri full" id="lsClaim">Claim 5 Class Cash</button>':'<p style="margin:6px 0">Finish steps 1 to 8 to unlock <b>5 Class Cash</b>. Steps finished: '+nDone+' of 8.</p>');
+  if(CASH_ON)c.appendChild(rc);
+  const iniv=()=>{const e=$('lsIni');const v=e?e.value:lastIni;return NAMES.includes(v)?v:'';};
+  if(all&&CASH_ON){const e=$('lsIni');e.oninput=()=>{e.value=e.value.replace(/[^a-zA-Z]/g,'').toUpperCase();};
+    $('lsClaim').onclick=()=>{const v=iniv(),m=$('lsMsg');m.style.display='block';
+      if(!v){m.className='fb no';m.textContent='Enter exactly 3 letters.';return;}
+      if(isBlocked(v)){sShutter();m.className='fb no';m.textContent='Those initials are not allowed. Pick different ones.';return;}
+      const r=rec(v);if(r.lessonPaid){m.className='fb info';m.textContent='You already claimed your lesson Class Cash. Balance: '+r.cash+'.';return;}
+      const t=today();if(r.day!==t){r.day=t;r.today=0;}
+      const earn=Math.max(0,Math.min(5,60-r.today));
+      if(earn<=0){m.className='fb info';m.textContent='Daily Class Cash cap reached. Come back tomorrow to claim.';return;}
+      r.cash+=earn;r.today+=earn;r.lessonPaid=true;saveRec(v,r);try{localStorage.setItem('fbd_last',v);}catch(e){}
+      sGood();m.className='fb ok';m.innerHTML='💰 +'+earn+' Class Cash! Balance: <b>'+r.cash+'</b>.';};}
+  const nav=h('div','card noprint','<b>What next?</b>');
+  const goto=(label,pri,fn)=>{const b=h('button','btn full'+(pri?' pri':''),label);b.onclick=()=>{const v=iniv();if(v)iniEl.value=v;const m=$('lsMain');if(m&&m._cleanup)m._cleanup();homeInfo();screen('s-home');if(fn)fn();};nav.appendChild(b);};
+  goto('Play quiz rounds',true,()=>$('btnPlay').click());
+  goto('Try the force puzzles',false,()=>$('btnPZ').click());
+  goto('Back to the home screen',false,null);
+  c.appendChild(nav);
+}
+
+/* ---------- navigation ---------- */
+let cur=0;
+function save(){store.set('fbdl_done',[...DONE]);}
+function markDone(id){DONE.add(id);save();paintPills();setNext();}
+function paintPills(){
+  const bar=$('lsSteps');bar.innerHTML='';
+  STEPS.forEach((s,i)=>{const b=h('button','pill'+(i===cur?' cur':'')+(DONE.has(s.id)?' done':''),(i+1)+'<span class="muted" style="display:none"></span>');
+    b.innerHTML=(i+1)+(i===cur?'. '+s.name:'');b.setAttribute('aria-label','Step '+(i+1)+': '+s.name+(DONE.has(s.id)?', complete':''));b.onclick=()=>go(i);bar.appendChild(b);});
+  const c=bar.children[cur];if(c&&c.scrollIntoView)c.scrollIntoView({inline:'center',block:'nearest'});
+}
+function setNext(){const last=cur===STEPS.length-1;$('lsNext').disabled=last?true:!DONE.has(STEPS[cur].id);$('lsNext').textContent=last?'Finished':'Next';$('lsBack').disabled=cur===0;}
+function go(i){
+  const prev=$('lsMain');if(prev&&prev._cleanup)prev._cleanup();rocketStop&&rocketStop();
+  cur=i;const st=STEPS[i],main=$('lsMain');main._cleanup=null;main.innerHTML='';
+  const done=()=>markDone(st.id),already=DONE.has(st.id);
+  main.appendChild(h('div','', '<h2 style="margin-top:14px">'+(i+1)+'. '+st.title+'</h2>'));
+  if(st.build){st.build(main,done,already);}
+  else if(st.custom==='pick')PickStep(main,done,already);
+  else if(st.custom==='build')BuildStep(main,done,already);
+  else if(st.custom==='notes')NotesStep(main,done);
+  else{
+    const extraHTML=typeof st.extra==='function'?st.extra(main):'';
+    if(extraHTML){const x=h('div','',extraHTML);main.appendChild(x);}
+    const holder=h('div');main.appendChild(holder);
+    const checkHolder=h('div');
+    const afterNotes=()=>{
+      if(st.extra==='crate')holder.appendChild(crateWidget());
+      main.appendChild(checkHolder);checkHolder.appendChild(Checks(st.checks,done,already));
+    };
+    holder.appendChild(Notes(st.id,st.notes,afterNotes,already));
+  }
+  paintPills();setNext();window.scrollTo(0,0);
+}
+$('lsNext').onclick=()=>{if(cur<STEPS.length-1&&DONE.has(STEPS[cur].id))go(cur+1);};
+$('lsBack').onclick=()=>{if(cur>0)go(cur-1);};
+window.__L={STEPS,DONE,go,get ans(){return curAns;}};
+let started=false;
+window.openLesson=function(step,from){
+  G.lessonFrom=from||'s-home';$('lsHome').textContent=from==='s-pz'?'Back to the puzzle':'Home';
+  screen('s-lesson');
+  const i=(step!=null)?step:(started?cur:0);started=true;go(i);
+};
+$('lsHome').onclick=()=>{const m=$('lsMain');if(m&&m._cleanup)m._cleanup();rocketStop&&rocketStop();homeInfo();screen(G.lessonFrom||'s-home');};
+$('btnLesson').onclick=()=>openLesson(null,'s-home');
+
+})();
+</script>
+</body>
+</html>
